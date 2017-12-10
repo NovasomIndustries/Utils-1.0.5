@@ -1,0 +1,18 @@
+#!/bin/sh
+BUILDROOT="buildroot-2016.05"
+REFERENCE_FS="Base"
+HERE=`pwd`
+cd ../FileSystem
+echo -n "Cleaning up ..."
+rm -rf Patches
+echo "Done"
+echo -n "Uncompressing ${BUILDROOT}.tar.bz2 ..."
+tar jxf ${BUILDROOT}.tar.bz2
+echo "Done"
+
+echo -n "Creating Novasis's patches against ${BUILDROOT} ..."
+diff -Naur ${BUILDROOT}/board ${REFERENCE_FS}/board > ${HERE}/Patches/001-Add-Novasis-Board-Support.patch
+diff -Naur -x gcc ${BUILDROOT}/configs ${REFERENCE_FS}/configs >> ${HERE}/Patches/001-Add-Novasis-Board-Support.patch
+diff -Naur -x gcc ${BUILDROOT}/package ${REFERENCE_FS}/package > ${HERE}/Patches/002-Add-Novasis-Multimedia.patch
+diff -Naur ${BUILDROOT}/package/gcc ${REFERENCE_FS}/package/gcc > ${HERE}/Patches/003-Use-gcc-5-4_patch
+echo "Done"

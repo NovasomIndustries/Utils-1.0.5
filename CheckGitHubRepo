@@ -1,0 +1,116 @@
+#!/bin/sh
+DIRS="Bootloader/u-boot-novasom-2015.04 Bootloader/u-boot-novasom-2016.03 Kernel/linux-imx_3.10.53_1.1.0_ga Kernel/linux-imx_4.1.15_1.2.0_ga Kernel/linux-imx_4.1.43 Doc Utils Qt/NOVAembed/NOVAembed CodeBlocks Doc"
+
+REPOCOUNT=`echo "$DIRS" | awk '{print NF}'`
+
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+NC='\033[0m'
+
+COUNTMODS=0
+COUNTRECV=0
+INCREMENT=1
+
+novaembed()
+{
+	cd /Devel/NOVAsom_SDK/Qt/NOVAembed/build-NOVAembed-Desktop-Debug
+	make distclean
+	/usr/lib/x86_64-linux-gnu/qt5/bin/qmake /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed/NOVAembed.pro -r -spec linux-g++-64 CONFIG+=debug
+	make
+	cd /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed/NOVAembed_P_Parser
+	rm -rf obj bin
+	mkdir -p obj bin/Debug
+	gcc -Wall -g  -c src/dts_gen.c -o obj/dts_gen.o
+	gcc -Wall -g  -c src/iomux.c -o obj/iomux.o
+	gcc -Wall -g  -c src/main.c -o obj/main.o
+	g++  -o bin/Debug/NOVAembed_P_Parser obj/dts_gen.o obj/iomux.o obj/main.o
+	cd /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed/NOVAembed_U_Parser
+	rm -rf obj bin
+	mkdir -p obj bin/Debug
+	gcc -Wall -g  -c src/dts_gen.c -o obj/dts_gen.o
+	gcc -Wall -g  -c src/iomux.c -o obj/iomux.o
+	gcc -Wall -g  -c src/main.c -o obj/main.o
+	g++  -o bin/Debug/NOVAembed_U_Parser obj/dts_gen.o obj/iomux.o obj/main.o  
+}
+
+gitloop()
+{
+gitbin="git -C $1"
+echo "Look for updates in ${1}" >> /Devel/NOVAsom_SDK/Logs/update.log
+
+# Fetches from all the remotes, although --all can be replaced with origin
+$gitbin fetch origin
+if [ $($gitbin rev-parse HEAD)>/dev/null 2>&1 != $($gitbin rev-parse @{u})>/dev/null 2>&1 ]; then
+	cd $1
+	COUNTMODS=`expr $COUNTMODS + $INCREMENT`;
+	#$gitbin rebase @{u} --preserve-merges
+	echo "Updates found in ${1}" >> /Devel/NOVAsom_SDK/Logs/update.log
+	echo "  ${RED}Updates in ${1}${NC}"
+	echo -n "  Do you want to update ? [Y/n] "
+	read VAR
+	if [ "${VAR}" = "Y" ]; then
+		echo "Applying updates in ${1}" >> /Devel/NOVAsom_SDK/Logs/update.log
+		if [ "${1}" = "/Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed" ]; then
+			rm -f /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed/NOVAembed.pro.userOLD
+			mv /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed/NOVAembed.pro.user /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed/NOVAembed.pro.userOLD
+		fi
+		if [ "${1}" = "/Devel/NOVAsom_SDK/Bootloader/u-boot-novasom-2016.03" ]; then
+			rm -rf /Devel/NOVAsom_SDK/Bootloader/u-boot-novasom-2016.03/NOVAsomU
+		fi
+		git pull origin master >> /Devel/NOVAsom_SDK/Logs/update.log
+		COUNTRECV=`expr $COUNTRECV + $INCREMENT`;
+		# echo $1
+		if [ "${1}" = "/Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed" ]; then
+			HERE=`pwd`
+			novaembed
+			cd ${HERE} 
+		fi
+		echo "${GREEN}SYNC OK${NC} : ${1}"
+	else
+		echo "${RED}Update skipped${NC}"
+	fi
+else
+	echo "${GREEN}SYNC OK${NC} : ${1}"
+fi
+}
+
+echo ""
+echo "***************************************"
+echo "**  Check for remote modified files  **"
+echo "***************************************"
+echo ""
+
+echo "Check on `date`" > /Devel/NOVAsom_SDK/Logs/update.log
+
+if ! [ -d /Devel/NOVAsom_SDK/Kernel/linux-imx_4.1.43 ]; then
+	HERE=`pwd`
+	cd /Devel/NOVAsom_SDK/Kernel
+	git clone https://github.com/NovasomIndustries/linux-imx_4.1.43.git
+	cd ${HERE} 
+fi
+
+if ! [ -d /Devel/NOVAsom_SDK/Bootloader/u-boot-novasom-2016.03 ]; then
+	HERE=`pwd`
+	cd /Devel/NOVAsom_SDK/Bootloader
+	git clone https://github.com/NovasomIndustries/u-boot-novasom-2016.03.git
+	cd ${HERE} 
+fi
+
+
+if [ ! -d /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed ]; then
+	HERE=`pwd`
+	cd /Devel/NOVAsom_SDK/Qt/NOVAembed
+	git clone https://github.com/NovasomIndustries/NOVAembed.git
+	novaembed
+	cd ${HERE} 
+fi
+
+for i in ${DIRS}; do
+	gitloop /Devel/NOVAsom_SDK/$i
+done
+echo ""
+echo "Finished. Found ${RED}${COUNTMODS}${NC} modification(s) , ${RED}${COUNTRECV}${NC} file(s) received from remote to ${GREEN}${REPOCOUNT}${NC} local repos"
+echo ""
+
+exit ${COUNTRECV}
+

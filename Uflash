@@ -1,0 +1,204 @@
+#!/bin/sh
+# ${1} is number of user partition
+# ${2} is size of first user partition, if enabled
+# ${3} is size of second user partition, if enabled
+# ${4} is the device
+#DISK="/dev/sdb"
+#[ "${1}" = "" ] && ${1}="-"
+#[ "${2}" = "" ] && ${2}="16"
+#[ "${3}" = "" ] && ${3}="16"
+#[ "${4}" = "" ] && ${4}="/dev/sdb"
+# ./Uflash - 0 0 /dev/sdb"
+DISK=${4}
+
+KERNEL="linux-imx_4.1.43"
+BOOTLOADER="u-boot-novasom-2016.03"
+cd /Devel/NOVAsom_SDK/Bootloader/${BOOTLOADER}
+
+UBOOT_IMX="NOVAsomU/u-boot.imx"
+[ ! -b ${DISK} ] && echo "${DISK} not found"
+[ ! -b ${DISK} ] && return 1
+sudo umount ${DISK}* >/dev/null 2>&1
+echo "Writing NOVAsomU uSD"
+sleep 1
+sudo echo -n "Writing u-boot ... "
+sudo dd if=/dev/zero of=${DISK} bs=4M count=1; sync
+sudo dd if=${UBOOT_IMX} of=${DISK} bs=512 seek=2; sync
+sync
+
+
+if [ "${1}" = "-" ]; then
+	sudo fdisk ${DISK} << __EOF__
+d
+1
+d
+2
+d
+3
+d
+4
+n
+p
+1
+
++192M
+t
+b
+n
+p
+3
+
++16M
+t
+3
+83
+w
+__EOF__
+
+fi
+if [ "${1}" = "1" ]; then
+	sudo fdisk ${DISK} << __EOF__
+n
+p
+1
+
++192M
+t
+b
+n
+p
+3
+
++16M
+t
+3
+83
+n
+p
+3
+
++${2}M
+t
+3
+83
+w
+__EOF__
+
+fi
+
+if [ "${1}" = "2" ]; then
+	sudo fdisk ${DISK} << __EOF__
+n
+p
+1
+
++192M
+t
+b
+n
+p
+2
+
++16M
+t
+2
+83
+n
+p
+3
+
++${2}M
+t
+3
+83
+
+n
+p
+
++${3}M
+t
+4
+83
+w
+__EOF__
+
+fi
+sync
+sleep 1
+echo y | sudo mkfs.vfat -F 16 ${DISK}1 -n BOOT 
+RET=$?
+echo "mkfs.vfat returned $RET"
+if ! [ "$?" = "0" ]; then
+	echo "mkfs.vfat with error $RET"
+	return 1
+fi
+
+echo y | sudo mkfs.ext3 -t ext3 -L P6Config ${DISK}3
+RET=$?
+echo "mkfs.ext3 returned $RET"
+if ! [ "$?" = "0" ]; then
+	echo "mkfs.ext3 with error $RET"
+	return 1
+fi
+
+if [ "${1}" = "1" ]; then
+	echo y | sudo sudo mkfs.ext3 -t ext3 -L P6user1 ${DISK}2
+	RET=$?
+	echo "mkfs.ext3 returned $RET"
+	if ! [ "$?" = "0" ]; then
+		echo "mkfs.ext3 with error $RET"
+		return 1
+	fi
+fi
+
+if [ "${1}" = "2" ]; then
+	echo y | sudo sudo mkfs.ext3 -t ext3 -L P6user1 ${DISK}4
+	RET=$?
+	echo "mkfs.ext3 returned $RET"
+	if ! [ "$?" = "0" ]; then
+		echo "mkfs.ext3 with error $RET"
+		return 1
+	fi
+	echo y | sudo mkfs.ext3 -t ext3 -L P6user2 ${DISK}4
+	RET=$?
+	echo "mkfs.ext3 returned $RET"
+	if ! [ "$?" = "0" ]; then
+		echo "mkfs.ext3 with error $RET"
+		return 1
+	fi
+fi
+
+sync
+sudo umount tmpmount >/dev/null 2>&1
+rm -rf tmpmount
+mkdir tmpmount
+sleep 1
+sudo mount ${DISK}1 tmpmount
+[ "$?" != "0" ] && return 1
+sudo rm -rf tmpmount/*
+[ "$?" != "0" ] && return 1
+echo `pwd`
+echo -n "Copying novasomu.dtb ..."
+sudo cp ../../Deploy/novasomu.dtb tmpmount/.
+[ "$?" != "0" ] && return 1
+echo "Done"
+echo -n "Copying u-boot files ..."
+sudo cp ../../Bootloader/${BOOTLOADER}/NOVAsomU/u-boot.imx tmpmount/.
+[ "$?" != "0" ] && return 1
+echo "Done"
+echo -n "Copying zImage ..."
+sudo cp ../../Kernel/${KERNEL}/arch/arm/boot/zImage tmpmount/.
+[ "$?" != "0" ] && return 1
+echo "Done"
+echo -n "Copying uInitrd ..."
+sudo cp ../../Deploy/uInitrd tmpmount/.
+[ "$?" != "0" ] && return 1
+echo "Done"
+sudo cp ../../Bootloader/${BOOTLOADER}/ddr-test-uboot-jtag-mx6ull.bin tmpmount/.
+sudo cp ../../Bootloader/${BOOTLOADER}/qspi-header.bin tmpmount/qspi-header.bin
+sudo umount tmpmount
+sync
+sudo umount ${DISK}
+sync
+
+return 0

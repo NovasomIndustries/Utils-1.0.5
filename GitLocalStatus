@@ -1,0 +1,38 @@
+#!/bin/bash
+PREPEND_PATH="/Devel/NOVAsom_SDK"
+DIRS="Bootloader/u-boot-novasom-2015.04 Bootloader/u-boot-novasom-2016.03 Kernel/linux-imx_3.10.53_1.1.0_ga Kernel/linux-imx_4.1.15_1.2.0_ga Kernel/linux-imx_4.1.43 Doc Utils Qt/NOVAembed/NOVAembed CodeBlocks"
+REPOCOUNT=`echo "$DIRS" | awk '{print NF}'`
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+NC='\033[0m'
+
+echo ""
+echo "*****************************"
+echo "**  Status of local files  **"
+echo "*****************************"
+echo ""
+HERE=`pwd`
+COUNTMODS=0
+COUNTSENT=0
+INCREMENT=1
+for i in ${DIRS}; do
+        cd /Devel/NOVAsom_SDK/$i
+        BASE=`basename $i`
+	STR="-----> On ${i} <-----"
+	SIZE=${#STR}
+	COUNT=2
+	while [ "$COUNT" -lt "$SIZE" ]; do
+		echo -n "*"
+		let COUNT=${COUNT}+1
+	done
+	echo "*"
+	echo $STR
+	COUNT=2
+	while [ "$COUNT" -lt "$SIZE" ]; do
+		echo -n "*"
+		let COUNT=${COUNT}+1
+	done
+	echo "*"
+	git status -s
+done
+echo ""

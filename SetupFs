@@ -1,0 +1,60 @@
+#!/bin/sh
+BR_VERSION="2017.11"
+BR="buildroot-${BR_VERSION}"
+PATCH_DIR="Patches"
+CONFIG_DIR="Configurations"
+BUSYBOX_CFG_BASE="BusyBox_Base.config"
+
+subst_config()
+{
+        SED_STRING="s/${1}=\([a-z]*\).*/${1}=\"${2}\"/g"
+        cat .config | sed $SED_STRING > aa.config
+        mv aa.config .config
+}
+
+cp -r ${PATCH_DIR} ../FileSystem
+cd ../FileSystem
+
+if [ "${1}" = "" ]; then
+        echo "File system name is missing, givin' up"
+        exit -1
+fi
+if [ -d ${1} ]; then
+        echo "File system exists, givin' up"
+        exit -1
+fi
+
+if [ "${2}" = "" ]; then
+        BUILDROOT_CFG_BASE="Buildroot_Base.config"
+else
+        BUILDROOT_CFG_BASE=${2}
+fi
+if [ "${3}" = "" ]; then
+        BUSYBOX_CFG_BASE="BusyBox_Base.config"
+else
+        BUSYBOX_CFG_BASE=${3}
+fi
+
+tar jxf ${BR}.tar.bz2
+mv ${BR} ${1}
+cd ${1}
+PATCH_FILES=`ls ../${PATCH_DIR}/*.patch`
+for i in ${PATCH_FILES}; do
+	patch -p1 -f --quiet < ${i}
+done
+
+cp ../../Utils/${CONFIG_DIR}/${BUILDROOT_CFG_BASE} .config
+cp ../../Utils/${CONFIG_DIR}/${BUSYBOX_CFG_BASE} BusyBox.config
+
+subst_config "BR2_TARGET_GENERIC_HOSTNAME" ${1}
+subst_config "BR2_TARGET_GENERIC_ISSUE" "Welcome"
+subst_config "BR2_PACKAGE_BUSYBOX_CONFIG" "\.\/BusyBox\.config"
+chmod 777 board/novasis/NOVAsomP/*
+chmod 777 board/novasis/NOVAsomU/*
+chmod 777 board/novasis/NOVAsomS/*
+cd ..
+rm -rf ${PATCH_DIR} 
+echo "Done"
+return 0
+
+

@@ -1,0 +1,70 @@
+#!/bin/sh
+# ${1} is number of user partition
+# ${2} is size of first user partition, if enabled
+# ${3} is size of second user partition, if enabled
+# ${4} is the device
+# ${5} is the dtb for solo/dl
+# ${6} is the dtb for quad
+
+. ./functions
+
+DISK=${4}
+PREPEND_PATH="/Devel/NOVAsom_SDK"
+
+DTB_FILESDL="${PREPEND_PATH}/DtbUserWorkArea/${5}"
+DTB_FILEQ="${PREPEND_PATH}/DtbUserWorkArea/${6}"
+KERNEL="${PREPEND_PATH}/Kernel/linux-imx_4.1.15_1.2.0_ga"
+SPL_FILE="${PREPEND_PATH}/Bootloader/u-boot-novasom-2015.04/NOVAsomP/SPL"
+UBOOT_IMG="${PREPEND_PATH}/Bootloader/u-boot-novasom-2015.04/NOVAsomP/u-boot.img"
+
+FILES="${DTB_FILESDL} ${DTB_FILEQ} ${UBOOT_IMG} ${KERNEL}"
+
+#echo $1 $2 $3 $DISK $DTB_FILESDL $DTB_FILEQ
+#echo $FILES
+#exit
+
+[ ! -b ${DISK} ] && echo "${DISK} not found"
+[ ! -b ${DISK} ] && return 1
+sudo umount ${DISK}* >/dev/null 2>&1
+echo "Writing ${5} uSD"
+sleep 1
+sudo echo -n "Writing u-boot ... "
+sudo dd if=/dev/zero of=${DISK} bs=4M count=1; sync
+sudo dd if=${SPL_FILE} of=${DISK} bs=1k seek=1; sync
+sync
+echo "Done"
+
+format_usd ${1} ${2} ${3} ${DISK}
+if [ "$?" = "1" ]; then
+	echo "Error formatting uSD!"
+	echo "1" > /tmp/result
+	return 1
+fi
+
+rm -rf tmpmount
+mkdir tmpmount
+sleep 1
+sudo mount ${DISK}1 tmpmount
+[ "$?" != "0" ] && return 1
+sudo rm -rf tmpmount/*
+[ "$?" != "0" ] && return 1
+echo -n "Copying "
+for i in ${FILES}; do
+	FILENAME=`basename $i`
+	echo -n "${FILENAME} "
+	cp $i tmpmount/.
+	if [ "$?" != "0" ] ; then
+		echo "Error writing files!"
+		echo "1" > /tmp/result
+		return 1
+	fi
+done
+echo "Done"
+
+sudo umount tmpmount
+sync
+sudo umount ${DISK}
+sync
+
+echo "0" > /tmp/result
+return 0

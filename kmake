@@ -1,0 +1,13 @@
+#!/bin/sh
+# $1 = source me file
+# $2 = kernel
+SOURCEMEFILE=$1
+KERNEL=$2
+DEFCONFIGFILE=$3
+. ./${SOURCEMEFILE}
+cd ../Kernel/${KERNEL}
+make -j32 zImage
+[ ! "$?" = "0" ] && return 1
+make -j32 modules
+[ ! "$?" = "0" ] && return 1
+return 0
