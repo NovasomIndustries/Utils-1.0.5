@@ -1,7 +1,10 @@
 #!/bin/sh
+# $1 : file system name
+# $3 : desired configuration
+# $2 : board name
 BR_VERSION="2017.11"
 BR="buildroot-${BR_VERSION}"
-PATCH_DIR="Patches"
+BSP_DIR="FsBsp"
 
 subst_config()
 {
@@ -10,38 +13,53 @@ subst_config()
         mv aa.config .config
 }
 
-cp -r ${PATCH_DIR} ../FileSystem
-cd ../FileSystem
-
 if [ "${1}" = "" ]; then
         echo "File system name is missing, givin' up"
         exit -1
 fi
 if [ -d ${1} ]; then
-        echo "File system exists, givin' up"
-        exit -1
+        rm -rf $1
 fi
 
-if [ "${2}" = "" ]; then
-        BUILDROOT_CFG_BASE="Buildroot_Base.config"
-else
-        BUILDROOT_CFG_BASE=${2}
-fi
 if [ "${3}" = "" ]; then
-        BUSYBOX_CFG_BASE="BusyBox_Base.config"
+	case $2 in
+		"P Series" ) 	BUILDROOT_CFG_BASE="PClass_Buildroot_Base.config"
+				BUSYBOX_CFG_BASE="PClass_BusyBox_Base.config"
+		;;
+		"U Series" )	BUILDROOT_CFG_BASE="UClass_Buildroot_Base.config"
+				BUSYBOX_CFG_BASE="UClass_BusyBox_Base.config"
+		;;
+		* ) 		BUILDROOT_CFG_BASE="PClass_Buildroot_Base.config"
+				BUSYBOX_CFG_BASE="PClass_BusyBox_Base.config"
+		;;
+	esac
 else
-        BUSYBOX_CFG_BASE=${3}
+        BUILDROOT_CFG_BASE=${3}
+	case $2 in
+		"P Series" ) BUSYBOX_CFG_BASE="PClass_BusyBox_Base.config"
+		;;
+		"U Series" ) BUSYBOX_CFG_BASE="UClass_BusyBox_Base.config"
+		;;
+		* ) 	     BUSYBOX_CFG_BASE="PClass_BusyBox_Base.config"
+		;;
+	esac
 fi
 
+cd ../FileSystem
 tar jxf ${BR}.tar.bz2
 mv ${BR} ${1}
 cd ${1}
+cp -r ../../Utils/${BSP_DIR}/novasis board/novasis
+echo `pwd`
+cp ../../Utils/Configurations/${BUILDROOT_CFG_BASE} .config
+cp ../../Utils/Configurations/${BUSYBOX_CFG_BASE} BusyBox.config
 
 subst_config "BR2_TARGET_GENERIC_HOSTNAME" ${1}
 subst_config "BR2_TARGET_GENERIC_ISSUE" "Welcome"
 subst_config "BR2_PACKAGE_BUSYBOX_CONFIG" "\.\/BusyBox\.config"
 cd ..
 echo "Done"
+echo 0 > /tmp/result
 return 0
 
 

@@ -4,14 +4,6 @@ DISK=${4}
 
 if [ "${1}" = "-" ]; then
 	sudo fdisk ${DISK} << __EOF__
-d
-1
-d
-2
-d
-3
-d
-4
 n
 p
 1

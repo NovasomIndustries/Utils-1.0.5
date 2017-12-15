@@ -1,0 +1,10 @@
+#!/bin/sh
+get_exec zImage
+get_exec imx6ul-14x14-evk.dtb
+rm -rf /tmp/update_dir
+mkdir /tmp/update_dir
+mount /dev/mmcblk1p1 /tmp/update_dir
+cp /tmp/zImage /tmp/update_dir/.       
+cp /tmp/imx6ul-14x14-evk.dtb /tmp/update_dir/.
+umount /tmp/update_dir
+
