@@ -1,0 +1,21 @@
+#!/bin/sh
+# ${1} is file system name
+# ${2} is the REFERENCE_SERVER IP
+
+echo "1" > /tmp/result
+PREPEND_PATH="/Devel/NOVAsom_SDK/FileSystem"
+FSNAME=$1
+IP=$2
+echo ""
+echo "*********************"
+echo "**** $1 ****"
+echo "**** $2 ****"
+cd ${PREPEND_PATH}/${FSNAME}
+make
+if [ "$?" != "0" ] ; then
+	echo "Error writing files!"
+	return 1
+fi
+echo "Finished OK"
+echo "0" > /tmp/result
+return 0
