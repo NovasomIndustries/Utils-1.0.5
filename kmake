@@ -1,8 +1,8 @@
 #!/bin/sh
-# $1 = source me file
-# $2 = kernel
-SOURCEMEFILE=$1
-KERNEL=$2
+# $1 = kernel
+# $2 = source me file
+KERNEL=$1
+SOURCEMEFILE=$2
 DEFCONFIGFILE=$3
 . ./${SOURCEMEFILE}
 cd ../Kernel/${KERNEL}

@@ -1,5 +1,7 @@
+#!/bin/sh
 . ./SourceMe32_5
-cd /Devel/NOVAsom_SDK/Bootloader/u-boot-novasomP-2015.04
+BOOT_P="/Devel/NOVAsom_SDK/Bootloader/u-boot-novasomP-2015.04"
+cd ${BOOT_P}
 export KBUILD_OUTPUT=./NOVAsomP
 make distclean
 make mrproper
@@ -7,10 +9,10 @@ make novasomp_defconfig
 make -j32
 cd /Devel/NOVAsom_SDK/Deploy
 rm -f u-boot.img SPL
-chmod 777 /Devel/NOVAsom_SDK/Bootloader
-chmod 777 /Devel/NOVAsom_SDK/Bootloader/u-boot-novasom-2015.04
-chmod 777 /Devel/NOVAsom_SDK/Bootloader/u-boot-novasom-2015.04/NOVAsomP
-chmod 777 /Devel/NOVAsom_SDK/Bootloader/u-boot-novasom-2015.04/NOVAsomP/u-boot.img /Devel/NOVAsom_SDK/Bootloader/u-boot-novasom-2015.04/NOVAsomP/SPL
-ln -s /Devel/NOVAsom_SDK/Bootloader/u-boot-novasom-2015.04/NOVAsomP/u-boot.img
-ln -s /Devel/NOVAsom_SDK/Bootloader/u-boot-novasom-2015.04/NOVAsomP/SPL
+#chmod 777 /Devel/NOVAsom_SDK/Bootloader
+#chmod 777 /Devel/NOVAsom_SDK/Bootloader/u-boot-novasom-2015.04
+#chmod 777 /Devel/NOVAsom_SDK/Bootloader/u-boot-novasom-2015.04/NOVAsomP
+#chmod 777 /Devel/NOVAsom_SDK/Bootloader/u-boot-novasom-2015.04/NOVAsomP/u-boot.img /Devel/NOVAsom_SDK/Bootloader/u-boot-novasom-2015.04/NOVAsomP/SPL
+ln -s ${BOOT_P}/NOVAsomP/u-boot.img
+ln -s ${BOOT_P}/NOVAsomP/SPL
 echo "0" > /tmp/result

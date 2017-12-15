@@ -13,11 +13,11 @@ PREPEND_PATH="/Devel/NOVAsom_SDK"
 
 DTB_FILESDL="${PREPEND_PATH}/DtbUserWorkArea/${5}"
 DTB_FILEQ="${PREPEND_PATH}/DtbUserWorkArea/${6}"
-KERNEL="${PREPEND_PATH}/Kernel/linux-imx_4.1.15_1.2.0_ga"
-SPL_FILE="${PREPEND_PATH}/Bootloader/u-boot-novasom-2015.04/NOVAsomP/SPL"
-UBOOT_IMG="${PREPEND_PATH}/Bootloader/u-boot-novasom-2015.04/NOVAsomP/u-boot.img"
+KERNEL="${PREPEND_PATH}/Deploy/zImage"
+FILESYSTEM="${PREPEND_PATH}/Deploy/uInitrd"
+SPL_FILE="${PREPEND_PATH}/Deploy/SPL"
+UBOOT_IMG="${PREPEND_PATH}/Deploy/u-boot.img"
 
-FILES="${DTB_FILESDL} ${DTB_FILEQ} ${UBOOT_IMG} ${KERNEL}"
 
 #echo $1 $2 $3 $DISK $DTB_FILESDL $DTB_FILEQ
 #echo $FILES
@@ -48,22 +48,24 @@ sudo mount ${DISK}1 tmpmount
 [ "$?" != "0" ] && return 1
 sudo rm -rf tmpmount/*
 [ "$?" != "0" ] && return 1
+
+FILES="${UBOOT_IMG} ${KERNEL} ${FILESYSTEM}"
 echo -n "Copying "
 for i in ${FILES}; do
 	FILENAME=`basename $i`
 	echo -n "${FILENAME} "
-	cp $i tmpmount/.
+	sudo cp $i tmpmount/.
 	if [ "$?" != "0" ] ; then
 		echo "Error writing files!"
 		echo "1" > /tmp/result
 		return 1
 	fi
 done
+sudo cp ${DTB_FILEQ} tmpmount/imx6q-novasomP.dtb
+sudo cp ${DTB_FILESDL} tmpmount/imx6sdl-novasomP.dtb
 echo "Done"
 
 sudo umount tmpmount
-sync
-sudo umount ${DISK}
 sync
 
 echo "0" > /tmp/result
