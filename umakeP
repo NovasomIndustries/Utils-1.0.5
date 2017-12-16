@@ -7,12 +7,13 @@ make distclean
 make mrproper
 make novasomp_defconfig
 make -j32
+if [ "$?" = "1"]; then
+	echo "1" > /tmp/result
+	return 1
+fi
 cd /Devel/NOVAsom_SDK/Deploy
 rm -f u-boot.img SPL
-#chmod 777 /Devel/NOVAsom_SDK/Bootloader
-#chmod 777 /Devel/NOVAsom_SDK/Bootloader/u-boot-novasom-2015.04
-#chmod 777 /Devel/NOVAsom_SDK/Bootloader/u-boot-novasom-2015.04/NOVAsomP
-#chmod 777 /Devel/NOVAsom_SDK/Bootloader/u-boot-novasom-2015.04/NOVAsomP/u-boot.img /Devel/NOVAsom_SDK/Bootloader/u-boot-novasom-2015.04/NOVAsomP/SPL
 ln -s ${BOOT_P}/NOVAsomP/u-boot.img
 ln -s ${BOOT_P}/NOVAsomP/SPL
 echo "0" > /tmp/result
+return 0
