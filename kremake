@@ -7,11 +7,12 @@ KERNEL=$2
 DEFCONFIGFILE=$3
 . ./${SOURCEMEFILE}
 cd ../Kernel/${KERNEL}
+echo "1" > /tmp/result
 make mrproper
 make ${DEFCONFIGFILE}
-[ ! "$?" = "0" ] && return 1
+[ ! "$?" = "0"] && exit
 make -j32 zImage
-[ ! "$?" = "0" ] && return 1
+[ ! "$?" = "0"] && exit
 make -j32 modules
-[ ! "$?" = "0" ] && return 1
-return 0
+[ ! "$?" = "0"] && exit
+echo "0" > /tmp/result

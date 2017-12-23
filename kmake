@@ -7,7 +7,8 @@ DEFCONFIGFILE=$3
 . ./${SOURCEMEFILE}
 cd ../Kernel/${KERNEL}
 make -j32 zImage
-[ ! "$?" = "0" ] && return 1
+echo "1" > /tmp/result
+[ ! "$?" = "0"] && exit
 make -j32 modules
-[ ! "$?" = "0" ] && return 1
-return 0
+[ ! "$?" = "0"] && exit
+echo "0" > /tmp/result

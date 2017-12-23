@@ -1,6 +1,6 @@
 #!/bin/bash
 PREPEND_PATH="/Devel/NOVAsom_SDK"
-DIRS="Bootloader/u-boot-novasom-2015.04 Bootloader/u-boot-novasom-2016.03 Kernel/linux-imx_3.10.53_1.1.0_ga Kernel/linux-imx_4.1.15_1.2.0_ga Kernel/linux-imx_4.1.43 Doc Utils Qt/NOVAembed/NOVAembed CodeBlocks"
+DIRS="/Kernel/linux-4.11.0-QualcommLinaro /Kernel/linux-imx_4.1.15_1.2.0_ga Kernel/linux-imx_4.1.43 Utils-1.0.5 Xcompiler-1.0.5 Qt/NOVAembed"
 REPOCOUNT=`echo "$DIRS" | awk '{print NF}'`
 GREEN='\033[0;32m'
 RED='\033[0;31m'

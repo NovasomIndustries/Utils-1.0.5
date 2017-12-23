@@ -18,10 +18,14 @@ FILESYSTEM="${PREPEND_PATH}/Deploy/uInitrd"
 SPL_FILE="${PREPEND_PATH}/Deploy/SPL"
 UBOOT_IMG="${PREPEND_PATH}/Deploy/u-boot.img"
 
-
-#echo $1 $2 $3 $DISK $DTB_FILESDL $DTB_FILEQ
-#echo $FILES
-#exit
+echo "1" > /tmp/result
+CHECKFILES="${UBOOT_IMG} ${KERNEL} ${FILESYSTEM} ${DTB_FILEQ} ${DTB_FILESDL}"
+for i in ${CHECKFILES}; do
+	if ! [ -f $i ]; then
+		echo "Error : file ${i} does not exists!"
+		return 1
+	fi
+done
 
 [ ! -b ${DISK} ] && echo "${DISK} not found"
 [ ! -b ${DISK} ] && return 1
@@ -37,7 +41,6 @@ echo "Done"
 format_usd ${1} ${2} ${3} ${DISK}
 if [ "$?" = "1" ]; then
 	echo "Error formatting uSD!"
-	echo "1" > /tmp/result
 	return 1
 fi
 
@@ -57,16 +60,19 @@ for i in ${FILES}; do
 	sudo cp $i tmpmount/.
 	if [ "$?" != "0" ] ; then
 		echo "Error writing files!"
-		echo "1" > /tmp/result
+		sudo umount tmpmount
 		return 1
 	fi
 done
 sudo cp ${DTB_FILEQ} tmpmount/imx6q-novasomP.dtb
+echo -n "`basename ${DTB_FILEQ}` "
 sudo cp ${DTB_FILESDL} tmpmount/imx6sdl-novasomP.dtb
+echo -n "`basename ${DTB_FILESDL}` "
 echo "Done"
 
 sudo umount tmpmount
 sync
 
 echo "0" > /tmp/result
+echo "Write finished succesfully"
 return 0

@@ -1,21 +1,28 @@
 #!/bin/sh
 # ${1} is file system name
 # ${2} is the REFERENCE_SERVER IP
+# ${3} is the BOARD_NAME
 
 echo "1" > /tmp/result
 PREPEND_PATH="/Devel/NOVAsom_SDK/FileSystem"
 FSNAME=$1
 IP=$2
 echo ""
-echo "*********************"
-echo "**** $1 ****"
-echo "**** $2 ****"
+echo "*******************************"
+echo "**** File system Name : $1 ****"
+echo "**** Assigned IP      : $2 ****"
+echo "**** Board            : $3 ****"
+echo "*******************************"
 cd ${PREPEND_PATH}/${FSNAME}
+case $3 in
+	"P" ) echo "REFERENCE_SERVER=${2}" > board/novasis/NOVAsomP/Init/etc/sysconfig/system_vars
+	;;
+	"U" ) echo "REFERENCE_SERVER=${2}" > board/novasis/NOVAsomU/Init/etc/sysconfig/system_vars
+	;;
+esac
+
+echo "REFERENCE_SERVER=${2}" > output/target/etc/sysconfig/system_vars
 make
-if [ "$?" != "0" ] ; then
-	echo "Error writing files!"
-	return 1
-fi
-echo "Finished OK"
+[ "$?" != "0" ] && exit
 echo "0" > /tmp/result
 return 0

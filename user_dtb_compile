@@ -1,6 +1,7 @@
 #!/bin/sh
+echo "1" > /tmp/result
 [ "$1" = "" ] && echo "No input file given"
-[ "$1" = "" ] && return 1
+[ "$1" = "" ] && exit
 INFILE=$1
 DTS_INFILE=${INFILE}.dts
 DTS_TMP=${INFILE}.tmp.dts
@@ -38,12 +39,11 @@ echo "Done"
 cd ${WORKAREA_LOCATION}
 echo "cpp -nostdinc -I ${KERNEL_LOCATION}/include -undef -x assembler-with-cpp ${DTS_INFILE} > ${DTS_TMP}"
 cpp -nostdinc -I ${KERNEL_LOCATION}/include -undef -x assembler-with-cpp ${DTS_INFILE} > ${DTS_TMP}
-[ ! "$?" = "0" ] && return 1
+[ ! "$?" = "0" ] && exit
 echo "${DTC_EXEC} -O dtb -b 0 -o ${DTB_OUTFILE} ${DTS_TMP}"
 ${DTC_EXEC} -O dtb -b 0 -o ${DTB_OUTFILE} ${DTS_TMP}
-[ ! "$?" = "0" ] && return 1
+[ ! "$?" = "0" ] && exit
 rm ${INFILE}.tmp.dts
 echo "Compilation successful"
 echo "################################"
 echo 0 > /tmp/result
-return 0

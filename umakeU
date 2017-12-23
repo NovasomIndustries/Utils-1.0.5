@@ -1,15 +1,12 @@
 #!/bin/sh
 . ./SourceMe32_5
+echo "1" > /tmp/result
 cd /Devel/NOVAsom_SDK/Bootloader/u-boot-novasomU-2016.03
 export KBUILD_OUTPUT=../u-boot-novasom-2016.03/NOVAsomU
 make distclean
 make mrproper
 make novasomu_defconfig
 make -j32
-if [ "$?" = "1"]; then
-        echo "1" > /tmp/result
-        return 1
-fi      
+[ "$?" = "1"] && exit
 echo "0" > /tmp/result
-return 0
 
