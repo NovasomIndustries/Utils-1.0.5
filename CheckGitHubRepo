@@ -1,5 +1,5 @@
 #!/bin/sh
-DIRS="Bootloader/u-boot-novasomP-2015.04 Bootloader/u-boot-novasomU-2016.03 Kernel/linux-imx_4.1.15_1.2.0_ga Kernel/linux-imx_4.1.43 Kernel/linux-4.11.0-QualcommLinaro Doc Utils Qt/NOVAembed"
+DIRS="Bootloader/u-boot-novasomM8-2017.11 Bootloader/u-boot-novasomP-2015.04 Bootloader/u-boot-novasomU-2016.03 Kernel/linux-imx_4.1.15_1.2.0_ga Kernel/linux-imx_4.1.43 Kernel/linux-4.11.0-QualcommLinaro Doc Utils Qt/NOVAembed"
 
 REPOCOUNT=`echo "$DIRS" | awk '{print NF}'`
 
@@ -36,7 +36,7 @@ novaembed()
 gitloop()
 {
 gitbin="git -C $1"
-# echo "Look for updates in ${1}"
+#echo "Look for updates in ${1}"
 echo "Look for updates in ${1}" >> /Devel/NOVAsom_SDK/Logs/update.log
 
 # Fetches from all the remotes, although --all can be replaced with origin
