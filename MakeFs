@@ -19,10 +19,11 @@ case $3 in
 	;;
 	"U" ) echo "REFERENCE_SERVER=${2}" > board/novasis/NOVAsomU/Init/etc/sysconfig/system_vars
 	;;
+	"M8") echo "REFERENCE_SERVER=${2}" > board/novasis/NOVAsomM8/Init/etc/sysconfig/system_vars
+	;;
 esac
 
-echo "REFERENCE_SERVER=${2}" > output/target/etc/sysconfig/system_vars
+[ -d output/target/etc/sysconfig/system_vars ] && echo "REFERENCE_SERVER=${2}" > output/target/etc/sysconfig/system_vars
 make
 [ "$?" != "0" ] && exit
 echo "0" > /tmp/result
-return 0

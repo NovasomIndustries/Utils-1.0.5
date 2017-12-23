@@ -3,12 +3,11 @@
 # $2 = source me file
 KERNEL=$1
 SOURCEMEFILE=$2
-DEFCONFIGFILE=$3
 . ./${SOURCEMEFILE}
 cd ../Kernel/${KERNEL}
 make -j32 zImage
 echo "1" > /tmp/result
-[ ! "$?" = "0"] && exit
+[ ! "$?" = "0" ] && exit
 make -j32 modules
-[ ! "$?" = "0"] && exit
+[ ! "$?" = "0" ] && exit
 echo "0" > /tmp/result
