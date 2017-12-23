@@ -1,5 +1,5 @@
 #!/bin/sh
-DIRS="Bootloader/u-boot-novasom-2015.04 Bootloader/u-boot-novasom-2016.03 Kernel/linux-imx_3.10.53_1.1.0_ga Kernel/linux-imx_4.1.15_1.2.0_ga Kernel/linux-imx_4.1.43 Doc Utils Qt/NOVAembed/NOVAembed CodeBlocks Doc"
+DIRS="Bootloader/u-boot-novasomP-2015.04 Bootloader/u-boot-novasomU-2016.03 Kernel/linux-imx_4.1.15_1.2.0_ga Kernel/linux-imx_4.1.43 Kernel/linux-4.11.0-QualcommLinaro Doc Utils Qt/NOVAembed"
 
 REPOCOUNT=`echo "$DIRS" | awk '{print NF}'`
 
@@ -15,16 +15,16 @@ novaembed()
 {
 	cd /Devel/NOVAsom_SDK/Qt/NOVAembed/build-NOVAembed-Desktop-Debug
 	make distclean
-	/usr/lib/x86_64-linux-gnu/qt5/bin/qmake /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed/NOVAembed.pro -r -spec linux-g++-64 CONFIG+=debug
+	/usr/lib/x86_64-linux-gnu/qt5/bin/qmake /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed.pro -r -spec linux-g++-64 CONFIG+=debug
 	make
-	cd /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed/NOVAembed_P_Parser
+	cd /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed_P_Parser
 	rm -rf obj bin
 	mkdir -p obj bin/Debug
 	gcc -Wall -g  -c src/dts_gen.c -o obj/dts_gen.o
 	gcc -Wall -g  -c src/iomux.c -o obj/iomux.o
 	gcc -Wall -g  -c src/main.c -o obj/main.o
 	g++  -o bin/Debug/NOVAembed_P_Parser obj/dts_gen.o obj/iomux.o obj/main.o
-	cd /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed/NOVAembed_U_Parser
+	cd /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed_U_Parser
 	rm -rf obj bin
 	mkdir -p obj bin/Debug
 	gcc -Wall -g  -c src/dts_gen.c -o obj/dts_gen.o
@@ -36,6 +36,7 @@ novaembed()
 gitloop()
 {
 gitbin="git -C $1"
+# echo "Look for updates in ${1}"
 echo "Look for updates in ${1}" >> /Devel/NOVAsom_SDK/Logs/update.log
 
 # Fetches from all the remotes, although --all can be replaced with origin
@@ -45,14 +46,14 @@ if [ $($gitbin rev-parse HEAD)>/dev/null 2>&1 != $($gitbin rev-parse @{u})>/dev/
 	COUNTMODS=`expr $COUNTMODS + $INCREMENT`;
 	#$gitbin rebase @{u} --preserve-merges
 	echo "Updates found in ${1}" >> /Devel/NOVAsom_SDK/Logs/update.log
-	echo "  ${RED}Updates in ${1}${NC}"
+	printf "  ${RED}Updates in ${1}${NC}"
 	echo -n "  Do you want to update ? [Y/n] "
 	read VAR
 	if [ "${VAR}" = "Y" ]; then
 		echo "Applying updates in ${1}" >> /Devel/NOVAsom_SDK/Logs/update.log
-		if [ "${1}" = "/Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed" ]; then
+		if [ "${1}" = "/Devel/NOVAsom_SDK/Qt/NOVAembed" ]; then
 			rm -f /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed/NOVAembed.pro.userOLD
-			mv /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed/NOVAembed.pro.user /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed/NOVAembed.pro.userOLD
+			mv /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed.pro.user /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed.pro.userOLD
 		fi
 		if [ "${1}" = "/Devel/NOVAsom_SDK/Bootloader/u-boot-novasom-2016.03" ]; then
 			rm -rf /Devel/NOVAsom_SDK/Bootloader/u-boot-novasom-2016.03/NOVAsomU
@@ -60,17 +61,18 @@ if [ $($gitbin rev-parse HEAD)>/dev/null 2>&1 != $($gitbin rev-parse @{u})>/dev/
 		git pull origin master >> /Devel/NOVAsom_SDK/Logs/update.log
 		COUNTRECV=`expr $COUNTRECV + $INCREMENT`;
 		# echo $1
-		if [ "${1}" = "/Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed" ]; then
+		if [ "${1}" = "/Devel/NOVAsom_SDK/Qt/NOVAembed" ]; then
 			HERE=`pwd`
 			novaembed
 			cd ${HERE} 
 		fi
-		echo "${GREEN}SYNC OK${NC} : ${1}"
+		printf "${GREEN}SYNC OK${NC} : ${1}"
 	else
-		echo "${RED}Update skipped${NC}"
+		printf "${RED}Update skipped${NC}"
 	fi
 else
-	echo "${GREEN}SYNC OK${NC} : ${1}"
+	printf "${GREEN}SYNC OK${NC} : ${1}"
+	echo " "
 fi
 }
 
@@ -97,9 +99,9 @@ if ! [ -d /Devel/NOVAsom_SDK/Bootloader/u-boot-novasom-2016.03 ]; then
 fi
 
 
-if [ ! -d /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed ]; then
+if [ ! -d /Devel/NOVAsom_SDK/Qt/NOVAembed ]; then
 	HERE=`pwd`
-	cd /Devel/NOVAsom_SDK/Qt/NOVAembed
+	cd /Devel/NOVAsom_SDK/Qt
 	git clone https://github.com/NovasomIndustries/NOVAembed.git
 	novaembed
 	cd ${HERE} 
@@ -109,7 +111,8 @@ for i in ${DIRS}; do
 	gitloop /Devel/NOVAsom_SDK/$i
 done
 echo ""
-echo "Finished. Found ${RED}${COUNTMODS}${NC} modification(s) , ${RED}${COUNTRECV}${NC} file(s) received from remote to ${GREEN}${REPOCOUNT}${NC} local repos"
+[ "${COUNTMODS}" -ge "1" ] && printf "Finished. Found ${RED}${COUNTMODS}${NC} modification(s) , ${RED}${COUNTRECV}${NC} file(s) received from remote to ${GREEN}${REPOCOUNT}${NC} local repos"
+[ "${COUNTMODS}" -le "0" ] && printf "Finished. Found ${GREEN}${COUNTMODS}${NC} modification(s) , ${GREEN}${COUNTRECV}${NC} file(s) received from remote to ${GREEN}${REPOCOUNT}${NC} local repos"
 echo ""
 
 exit ${COUNTRECV}

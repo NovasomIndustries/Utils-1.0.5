@@ -18,10 +18,11 @@ gitbin="git -C /Devel/NOVAsom_SDK/${DIR_TO_PULL}"
 $gitbin fetch origin
 COUNTRECV=0;
 if [ $($gitbin rev-parse HEAD)>/dev/null 2>&1 != $($gitbin rev-parse @{u})>/dev/null 2>&1 ]; then
-	echo "  ${RED}Updates in ${DIR_TO_PULL}, downloading ...${NC}"
+	printf "  ${RED}Updates in ${DIR_TO_PULL}, downloading ...${NC}"
 	COUNTRECV=1;
 	git pull origin master
+	echo " "
 fi
-echo "${GREEN}SYNC OK${NC} : ${DIR_TO_PULL}"
+printf "${GREEN}SYNC OK${NC} : ${DIR_TO_PULL}"
 exit ${COUNTRECV}
 
