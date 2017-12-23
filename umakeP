@@ -17,4 +17,3 @@ rm -f u-boot.img SPL
 ln -s ${BOOT_P}/NOVAsomP/u-boot.img
 ln -s ${BOOT_P}/NOVAsomP/SPL
 echo "0" > /tmp/result
-return 0

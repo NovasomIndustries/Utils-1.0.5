@@ -1,0 +1,13 @@
+#!/bin/sh
+. ./SourceMe32_5
+BOOT_P="/Devel/NOVAsom_SDK/Bootloader/u-boot-2017.11_M8"
+echo "1" > /tmp/result
+make distclean
+[ "$?" != "0" ] && exit
+make mrproper
+[ "$?" != "0" ] && exit
+make dragonboard410c_defconfig
+[ "$?" != "0" ] && exit
+make -j32
+[ "$?" != "0" ] && exit
+echo "0" > /tmp/result

@@ -9,26 +9,21 @@
 . ./functions
 
 DISK=${4}
-PREPEND_PATH="/Devel/NOVAsom_SDK"
 
-DTB_FILESDL="${PREPEND_PATH}/DtbUserWorkArea/${5}"
-DTB_FILEQ="${PREPEND_PATH}/DtbUserWorkArea/${6}"
-KERNEL="${PREPEND_PATH}/Deploy/zImage"
-FILESYSTEM="${PREPEND_PATH}/Deploy/uInitrd"
-SPL_FILE="${PREPEND_PATH}/Deploy/SPL"
-UBOOT_IMG="${PREPEND_PATH}/Deploy/u-boot.img"
+SPL_FILE= "/Devel/NOVAsom_SDK/Bootloader/u-boot-novasomP-2015.04/NOVAsomP/SPL"
+UBOOT_IMG="/Devel/NOVAsom_SDK/Bootloader/u-boot-novasomP-2015.04/NOVAsomP/u-boot.img"
+KERNEL="/Devel/NOVAsom_SDK/Kernel/linux-imx_4.1.15_1.2.0_ga/arch/arm/boot/zImage"
+DTB_FILESDL="/Devel/NOVAsom_SDK/DtbUserWorkArea/${5}"
+DTB_FILEQ="/Devel/NOVAsom_SDK/DtbUserWorkArea/${6}"
+FILESYSTEM="/Devel/NOVAsom_SDK/Deploy/uInitrd"
 
 echo "1" > /tmp/result
-CHECKFILES="${UBOOT_IMG} ${KERNEL} ${FILESYSTEM} ${DTB_FILEQ} ${DTB_FILESDL}"
-for i in ${CHECKFILES}; do
-	if ! [ -f $i ]; then
-		echo "Error : file ${i} does not exists!"
-		return 1
-	fi
-done
 
-[ ! -b ${DISK} ] && echo "${DISK} not found"
-[ ! -b ${DISK} ] && return 1
+if [ ! -b ${DISK} ]; then
+       echo "${DISK} not found"
+       exit
+fi
+
 sudo umount ${DISK}* >/dev/null 2>&1
 echo "Writing ${5} uSD"
 sleep 1
@@ -41,31 +36,30 @@ echo "Done"
 format_usd ${1} ${2} ${3} ${DISK}
 if [ "$?" = "1" ]; then
 	echo "Error formatting uSD!"
-	return 1
+	exit
 fi
 
 rm -rf tmpmount
 mkdir tmpmount
 sleep 1
 sudo mount ${DISK}1 tmpmount
-[ "$?" != "0" ] && return 1
-sudo rm -rf tmpmount/*
-[ "$?" != "0" ] && return 1
+[ "$?" != "0" ] && exit
 
-FILES="${UBOOT_IMG} ${KERNEL} ${FILESYSTEM}"
-echo -n "Copying "
-for i in ${FILES}; do
-	FILENAME=`basename $i`
-	echo -n "${FILENAME} "
-	sudo cp $i tmpmount/.
-	if [ "$?" != "0" ] ; then
-		echo "Error writing files!"
-		sudo umount tmpmount
-		return 1
-	fi
-done
+echo -n "Copying `basename ${UBOOT_IMG}` ..."
+sudo cp ${UBOOT_IMG} tmpmount/.
+[ "$?" != "0" ] && exit
+echo "Done"
+echo -n "Copying `basename ${KERNEL}` ..."
+sudo cp ${KERNEL} tmpmount/.
+[ "$?" != "0" ] && exit
+echo "Done"
+echo -n "Copying `basename ${UINITRD}` ..."
+sudo cp ${UINITRD} tmpmount/.
+[ "$?" != "0" ] && exit
+
+echo -n "Copying `basename ${DTB_FILEQ}` ..."
 sudo cp ${DTB_FILEQ} tmpmount/imx6q-novasomP.dtb
-echo -n "`basename ${DTB_FILEQ}` "
+echo -n "Copying `basename ${DTB_FILESDL}` ..."
 sudo cp ${DTB_FILESDL} tmpmount/imx6sdl-novasomP.dtb
 echo -n "`basename ${DTB_FILESDL}` "
 echo "Done"
@@ -75,4 +69,3 @@ sync
 
 echo "0" > /tmp/result
 echo "Write finished succesfully"
-return 0
