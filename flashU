@@ -4,7 +4,11 @@
 # ${3} is size of second user partition, if enabled
 # ${4} is the device
 # ${5} is the dtb
+# ${6} is the NOVAsomParams file
+# ${7} is the ramdisk size
 # ./Uflash - 0 0 /dev/sdb"
+
+. ./functions
 
 KERNEL="/Devel/NOVAsom_SDK/Kernel/linux-imx_4.1.43/arch/arm/boot/zImage"
 BOOTLOADER="/Devel/NOVAsom_SDK/Bootloader/u-boot-novasomU-2016.03"
@@ -12,9 +16,17 @@ UINITRD="/Devel/NOVAsom_SDK/Deploy/uInitrd"
 UBOOT_IMX="${BOOTLOADER}/NOVAsomU/u-boot.imx"
 DISK=${4}
 DTB="${5}"
+NOVASOMPARAMS="/Devel/NOVAsom_SDK/Utils/BootParameters/$6"
+RAMDISK_SIZE="$7"
 
 echo "1" > /tmp/result
-
+FILES="$BOOTLOADER $KERNEL $DTB $UINITRD $NOVASOMPARAMS"
+for i in ${FILES}; do
+        if ! [ -f ${i} ]; then
+                echo "File ${i} not found"
+                exit
+        fi
+done
 
 if [ ! -b ${DISK} ]; then
 	echo "${DISK} not found"
@@ -100,6 +112,13 @@ echo -n "Copying uInitrd ..."
 sudo cp ${UINITRD} tmpmount/.
 [ "$?" != "0" ] && exit
 echo "Done"
+echo -n "Copying `basename ${NOVASOMPARAMS}` ..."
+echo "setramsize=setenv rdsize ${RAMDISK_SIZE}" > ../Deploy/NOVAsomParams
+cat ${NOVASOMPARAMS} >> ../Deploy/NOVAsomParams
+sudo cp ../Deploy/NOVAsomParams tmpmount/NOVAsomParams
+[ "$?" != "0" ] && exit
+
+
 #sudo cp ../../Bootloader/${BOOTLOADER}/ddr-test-uboot-jtag-mx6ull.bin tmpmount/.
 #sudo cp ../../Bootloader/${BOOTLOADER}/qspi-header.bin tmpmount/qspi-header.bin
 sudo umount tmpmount
@@ -108,3 +127,5 @@ sudo umount ${DISK}
 sync
 
 echo "0" > /tmp/result
+echo "Write finished succesfully"
+

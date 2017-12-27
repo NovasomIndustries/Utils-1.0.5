@@ -12,6 +12,6 @@ setvideo_lvds1366x768=setenv videomode video=mxcfb0:dev=ldb,LVDS-1366X768,if=RGB
 setvideo_lvds1920x1080B18=setenv videomode video=mxcfb0:dev=ldb,LDB-1080P60,if=RGB666 ldb=spl0 fbmem=28M
 setvideo_lvds1920x1080B24=setenv videomode video=mxcfb0:dev=ldb,LDB-1080P60,if=RGB24 ldb=spl0 fbmem=28M
 setvideo_par480x272=setenv videomode video=mxcfb0:dev=lcd,LCD-480X272,if=RGB24 fbmem=28M ${calibrate}; displays_off
-setboardargs=setenv bootargs console=${console},${baudrate} root=${ramroot} ${videomode} ramdisk_size=${rdsize} consoleblank=0;
-uenvcmd=run setramsize ; run setvideo_lvds1280x800; run setboardargs ; run mmcloadfdt ; run mmcloadimage ; run mmcloadinitrd ; bootz ${loadaddr} ${fsaddr} ${fdt_addr}
+setboardargs=setenv bootargs console=${console},${baudrate} root=${ramroot} ${videomode} ramdisk_size=${rdsize} consoleblank=0 vt.global_cursor_default=0;
+uenvcmd=run setramsize;run setvideo_lvds1280x800; run setboardargs ; run mmcloadfdt ; run mmcloadimage ; run mmcloadinitrd ; bootz ${loadaddr} ${fsaddr} ${fdt_addr}
 
