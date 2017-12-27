@@ -1,18 +1,19 @@
 #!/bin/sh
-# $1 = source me file
-# $2 = kernel
+# $1 = kernel
+# $2 = source me file
 # $3 = defconfig file
-SOURCEMEFILE=$1
-KERNEL=$2
+
+KERNEL=$1
+SOURCEMEFILE=$2
 DEFCONFIGFILE=$3
 . ./${SOURCEMEFILE}
 cd ../Kernel/${KERNEL}
 echo "1" > /tmp/result
 make mrproper
 make ${DEFCONFIGFILE}
-[ ! "$?" = "0"] && exit
+[ ! "$?" = "0" ] && exit
 make -j32 zImage
-[ ! "$?" = "0"] && exit
+[ ! "$?" = "0" ] && exit
 make -j32 modules
-[ ! "$?" = "0"] && exit
+[ ! "$?" = "0" ] && exit
 echo "0" > /tmp/result

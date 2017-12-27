@@ -27,8 +27,8 @@ if [ "${3}" = "" ]; then
 		"P Series" ) 	BUILDROOT_CFG_BASE="PClass_Buildroot_Base.config"
 				BUSYBOX_CFG_BASE="PClass_BusyBox_Base.config"
 		;;
-		"U5" )	BUILDROOT_CFG_BASE="UClass_Buildroot_Base.config"
-				BUSYBOX_CFG_BASE="UClass_BusyBox_Base.config"
+		"U5" )	BUILDROOT_CFG_BASE="U5Class_Buildroot_Base.config"
+				BUSYBOX_CFG_BASE="U5Class_BusyBox_Base.config"
 		;;
 		"M8" )	BUILDROOT_CFG_BASE="M8Class_Buildroot_Base.config"
 				BUSYBOX_CFG_BASE="M8Class_BusyBox_Base.config"
@@ -42,7 +42,7 @@ else
 	case $2 in
 		"P Series" ) BUSYBOX_CFG_BASE="PClass_BusyBox_Base.config"
 		;;
-		"U5" ) BUSYBOX_CFG_BASE="UClass_BusyBox_Base.config"
+		"U5" ) BUSYBOX_CFG_BASE="U5Class_BusyBox_Base.config"
 		;;
 		"M8") BUSYBOX_CFG_BASE="M8Class_BusyBox_Base.config"
 		;;
