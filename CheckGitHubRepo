@@ -1,5 +1,6 @@
 #!/bin/sh
-DIRS="Bootloader/u-boot-novasomM8-2017.11 Bootloader/u-boot-novasomP-2015.04 Bootloader/u-boot-novasomU-2016.03 Kernel/linux-imx_4.1.15_1.2.0_ga Kernel/linux-imx_4.1.43 Kernel/linux-4.11.0-QualcommLinaro Doc Utils Qt/NOVAembed"
+UPD_ELEMENTS="Bootloader/u-boot-novasomM8-2017.11 Bootloader/u-boot-novasomP-2015.04 Bootloader/u-boot-novasomU-2016.03 Kernel/linux-imx_4.1.15_1.2.0_ga Kernel/linux-imx_4.1.43 Kernel/linux-4.11.0-QualcommLinaro"
+DIRS="${UPD_ELEMENTS} Doc Utils Qt/NOVAembed"
 
 REPOCOUNT=`echo "$DIRS" | awk '{print NF}'`
 
@@ -84,20 +85,15 @@ echo ""
 
 echo "Check on `date`" > /Devel/NOVAsom_SDK/Logs/update.log
 
-if ! [ -d /Devel/NOVAsom_SDK/Kernel/linux-imx_4.1.43 ]; then
+for i in ${UPD_ELEMENTS}; do
 	HERE=`pwd`
-	cd /Devel/NOVAsom_SDK/Kernel
-	git clone https://github.com/NovasomIndustries/linux-imx_4.1.43.git
-	cd ${HERE} 
-fi
-
-if ! [ -d /Devel/NOVAsom_SDK/Bootloader/u-boot-novasom-2016.03 ]; then
-	HERE=`pwd`
-	cd /Devel/NOVAsom_SDK/Bootloader
-	git clone https://github.com/NovasomIndustries/u-boot-novasom-2016.03.git
-	cd ${HERE} 
-fi
-
+	if ! [ -d /Devel/NOVAsom_SDK/${i} ]; then
+		cd `dirname $i`
+		echo "`dirname $i`/`basename $i` not found, cloning"
+		git clone https://github.com/NovasomIndustries/`basename $i`
+	fi
+	cd ${HERE}
+done
 
 if [ ! -d /Devel/NOVAsom_SDK/Qt/NOVAembed ]; then
 	HERE=`pwd`
