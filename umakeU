@@ -7,6 +7,6 @@ make distclean
 make mrproper
 make novasomu_defconfig
 make -j32
-[ "$?" = "1"] && exit
+[ "$?" = "1" ] && exit
 echo "0" > /tmp/result
 

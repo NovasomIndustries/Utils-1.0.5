@@ -15,12 +15,12 @@ BOOTLOADER="/Devel/NOVAsom_SDK/Bootloader/u-boot-novasomU-2016.03"
 UINITRD="/Devel/NOVAsom_SDK/Deploy/uInitrd"
 UBOOT_IMX="${BOOTLOADER}/NOVAsomU/u-boot.imx"
 DISK=${4}
-DTB="${5}"
+DTB="/Devel/NOVAsom_SDK/DtbUserWorkArea/${5}.dtb"
 NOVASOMPARAMS="/Devel/NOVAsom_SDK/Utils/BootParameters/$6"
 RAMDISK_SIZE="$7"
 
 echo "1" > /tmp/result
-FILES="$BOOTLOADER $KERNEL $DTB $UINITRD $NOVASOMPARAMS"
+FILES="$UBOOT_IMX $KERNEL $DTB $UINITRD $NOVASOMPARAMS"
 for i in ${FILES}; do
         if ! [ -f ${i} ]; then
                 echo "File ${i} not found"
