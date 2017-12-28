@@ -1,10 +1,11 @@
 #!/bin/sh
 get_exec zImage
-get_exec imx6ul-14x14-evk.dtb
-rm -rf /tmp/update_dir
+get_exec novasomu.dtb
 mkdir /tmp/update_dir
-mount /dev/mmcblk1p1 /tmp/update_dir
+mount /dev/mmcblk0p1 /tmp/update_dir
 cp /tmp/zImage /tmp/update_dir/.       
-cp /tmp/imx6ul-14x14-evk.dtb /tmp/update_dir/.
+cp /tmp/novasomu.dtb /tmp/update_dir/.
+cp /tmp/NOVAsomParams /tmp/update_dir/.
 umount /tmp/update_dir
+rm -rf /tmp/update_dir
 
