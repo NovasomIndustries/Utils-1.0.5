@@ -1,6 +1,7 @@
 #!/bin/sh
 get_exec zImage
 get_exec novasomu.dtb
+get_exec NOVAsomParams
 mkdir /tmp/update_dir
 mount /dev/mmcblk0p1 /tmp/update_dir
 cp /tmp/zImage /tmp/update_dir/.       
