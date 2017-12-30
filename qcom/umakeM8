@@ -1,0 +1,19 @@
+#!/bin/sh
+cd /Devel/NOVAsom_SDK/Utils
+. ./SourceMe64
+cd /Devel/NOVAsom_SDK/Bootloader/u-boot-novasomM8-2017.11
+touch rd
+echo "1" > /tmp/result
+make distclean
+[ "$?" != "0" ] && exit
+make mrproper
+[ "$?" != "0" ] && exit
+make dragonboard410c_defconfig
+[ "$?" != "0" ] && exit
+make -j32
+[ "$?" != "0" ] && exit
+./dtbTool -o dt.img arch/arm/dts
+./mkbootimg --kernel=u-boot-dtb.bin --output=u-boot.img --dt=dt.img --pagesize 2048 --base 0x80000000 --ramdisk=rd --cmdline=""
+
+
+echo "0" > /tmp/result

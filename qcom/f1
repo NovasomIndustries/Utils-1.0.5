@@ -1,0 +1,105 @@
+#!/bin/sh
+KERNEL="/Devel/NOVAsom_SDK/Kernel/linux-4.11.0-QualcommLinaro/arch/arm/boot/zImage"
+BOOTLOADER="/Devel/NOVAsom_SDK/Bootloader/u-boot-novasomM8-2017.11"
+UINITRD="/Devel/NOVAsom_SDK/Deploy/uInitrd"
+UBOOT_QCOM="${BOOTLOADER}/u-boot.img"
+DISK=${4}
+DTB="/Devel/NOVAsom_SDK/DtbUserWorkArea/${5}.dtb"
+NOVASOMPARAMS="/Devel/NOVAsom_SDK/Utils/BootParameters/$6"
+RAMDISK_SIZE="$7"
+echo "1" > /tmp/result
+
+if [ ! -b ${DISK} ]; then
+        echo "${DISK} not found"
+        exit
+fi
+
+DISK=/dev/sdb
+
+sudo dd if=/dev/zero of=${DISK} bs=1M count=1
+sudo gdisk ${DISK} << __EOF__
+2
+n
+
+
++512K
+
+n
+
+
++512K
+
+n
+
+
++1M
+
+n
+
+
++512K
+
+n
+
+
++16K
+
+n
+
+
++1M
+
+n
+
+
++64M
+
+n
+
+
++1M
+
+n
+
+
++64M
+
+c
+1
+sbl1
+c
+2
+rpm
+c
+3
+tz
+c
+4
+hyp
+c
+5
+sec
+c
+6
+aboot
+c
+7
+boot
+c
+8
+devinfo
+c
+9
+root
+w
+y
+__EOF__
+
+
+
+sudo dd if=qcom_bootloaders/sbl1.mbn of=${DISK}1
+sudo dd if=qcom_bootloaders/rpm.mbn of=${DISK}2
+sudo dd if=qcom_bootloaders/tz.mbn of=${DISK}3
+sudo dd if=qcom_bootloaders/hyp.mbn of=${DISK}4
+sudo dd if=qcom_bootloaders/emmc_appsboot.mbn of=${DISK}6
+sudo dd if=${UBOOT_QCOM} of=${DISK}7
