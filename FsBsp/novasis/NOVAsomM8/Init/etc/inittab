@@ -24,7 +24,7 @@
 ::sysinit:/etc/init.d/rcS
 
 # Put a getty on the serial port
-ttymsm0::respawn:/sbin/getty -L -l /bin/autologin.sh -n ttymxc2 115200 vt100 # GENERIC_SERIAL
+ttyMSM0::respawn:/sbin/getty -L -l /bin/autologin.sh -n ttyMSM0 115200 vt100 # GENERIC_SERIAL
 
 # Stuff to do for the 3-finger salute
 #::ctrlaltdel:/sbin/reboot

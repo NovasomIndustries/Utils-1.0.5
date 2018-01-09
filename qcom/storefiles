@@ -1,0 +1,15 @@
+#!/bin/sh
+DISK="/dev/sdb"
+
+sudo rm -rf tmpmnt
+sudo mkdir tmpmnt
+FILES="/Devel/NOVAsom_SDK/Kernel/linux-4.11.0-QualcommLinaro/arch/arm64/boot/Image /Devel/NOVAsom_SDK/Kernel/linux-4.11.0-QualcommLinaro/arch/arm64/boot/dts/qcom/apq8016-sbc.dtb /Devel/NOVAsom_SDK/FileSystem/M8_Base/output/images/uInitrd"
+sudo mount ${DISK}9 tmpmnt
+sudo mkdir tmpmnt/NOVAboot
+for i in ${FILES}; do
+        sudo cp ${i} tmpmnt/NOVAboot/.
+        echo "File $i stored on ${DISK}9"
+done
+sudo umount tmpmnt
+sync
+

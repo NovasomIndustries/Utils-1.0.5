@@ -243,7 +243,7 @@ while IFS=, read part start end name size align type format file; do
         CMD="$CMD -t $part:$type"
     fi
 
-    echo "sgdisk $CMD $IMG"
+    echo "***************** COMMAND : sgdisk $CMD $IMG"
     sgdisk $CMD $IMG
 
     # create partition only, do not write file
@@ -271,3 +271,28 @@ done < $gpt
 if [ "$DEBUG" = "1" ] ;then
     gdisk -l $IMG
 fi
+sudo dd if=qcom_bootloaders/u-boot.img of=${IMG}7
+echo "Formatting ${IMG}9 ..."
+sleep 1
+sudo fdisk ${IMG} << __EOF__
+p
+w
+q
+__EOF__
+
+
+
+echo y | sudo mke2fs ${IMG}9 
+rm -rf tmpmnt
+mkdir tmpmnt
+FILES="/Devel/NOVAsom_SDK/Kernel/linux-4.11.0-QualcommLinaro/arch/arm64/boot/Image /Devel/NOVAsom_SDK/Kernel/linux-4.11.0-QualcommLinaro/arch/arm64/boot/dts/qcom/msm8916-mtp.dtb /Devel/NOVAsom_SDK/Kernel/linux-4.11.0-QualcommLinaro/arch/arm64/boot/dts/qcom/apq8016-sbc.dtb /Devel/NOVAsom_SDK/FileSystem/M8_Base/output/images/uInitrd"
+sudo mount ${IMG}9 tmpmnt
+for i in ${FILES}; do
+	cp ${i} tmpmnt
+	echo "File $i stored on ${IMG}9"
+done
+#cp tmpmnt/msm8916-mtp.dtb tmpmnt/apq8016-sbc.dtb
+sudo umount tmpmnt
+sync
+
+
