@@ -3,6 +3,7 @@
 # $2 = source me file
 KERNEL=$1
 SOURCEMEFILE=$2
+echo "Working on ${KERNEL} with ${SOURCEMEFILE}"
 . ./${SOURCEMEFILE}
 cd ../Kernel/${KERNEL}
 make -j32 zImage

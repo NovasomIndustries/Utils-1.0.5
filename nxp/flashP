@@ -21,6 +21,7 @@ UINITRD="/Devel/NOVAsom_SDK/Deploy/uInitrd"
 NOVASOMPARAMS="/Devel/NOVAsom_SDK/Utils/BootParameters/$7"
 DEPLOY_DIR="/Devel/NOVAsom_SDK/Deploy"
 RAMDISK_SIZE="$8"
+echo "NOVASOMPARAMS is $NOVASOMPARAMS"
 
 
 echo "1" > /tmp/result
@@ -73,7 +74,7 @@ echo -n "Copying `basename ${UINITRD}` ..."
 sudo cp ${UINITRD} tmpmount/.
 [ "$?" != "0" ] && exit
 echo -n "Copying `basename ${NOVASOMPARAMS}` ..."
-echo "setramsize=setenv rdsize ${RAMDISK_SIZE}" > ${NOVASOMPARAMS}
+echo "setramsize=setenv rdsize ${RAMDISK_SIZE}" > ${DEPLOY_DIR}/NOVAsomParams
 cat ${NOVASOMPARAMS} >> ${DEPLOY_DIR}/NOVAsomParams
 sudo cp ${DEPLOY_DIR}/NOVAsomParams tmpmount/.
 [ "$?" != "0" ] && exit
