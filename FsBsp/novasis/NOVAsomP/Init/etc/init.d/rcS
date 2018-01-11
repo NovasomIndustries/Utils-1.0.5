@@ -1,5 +1,15 @@
 #!/bin/sh
 
+#determine if SPDIF has been enabled in the dtb
+HDMI_LOC=`dmesg | grep ": imx-hdmi" | awk '{print $1}' | sed 's/#//g' | sed 's/://g'`
+if [ "${HDMI_LOC}" == "1" ]; then
+	# SPDIF is enabled
+	cp /etc/sysconfig/hdmi_spdif.asoundrc /root/.asoundrc
+else
+	# SPDIF is disabled
+	cp /etc/sysconfig/hdmi_only.asoundrc /root/.asoundrc
+fi
+
 mount /dev/mmcblk0p3 /mnt
 if [ -d /mnt/application_storage ]; then
 	cp -r /mnt/application_storage /tmp/.

@@ -1,0 +1,353 @@
+diff -Naur -x gcc buildroot-2017.11/package/ffmpeg/ffmpeg.hash P_Gstreamer/package/ffmpeg/ffmpeg.hash
+--- buildroot-2017.11/package/ffmpeg/ffmpeg.hash	2017-11-30 22:35:17.000000000 +0100
++++ P_Gstreamer/package/ffmpeg/ffmpeg.hash	1970-01-01 01:00:00.000000000 +0100
+@@ -1,2 +0,0 @@
+-# Locally calculated
+-sha256 a893490c3a8a7caaa9c47373b789c0335d0ac3572f2ba61059de842b9e45d802  ffmpeg-3.3.5.tar.xz
+diff -Naur -x gcc buildroot-2017.11/package/ffmpeg/ffmpeg.mk P_Gstreamer/package/ffmpeg/ffmpeg.mk
+--- buildroot-2017.11/package/ffmpeg/ffmpeg.mk	2017-11-30 22:35:17.000000000 +0100
++++ P_Gstreamer/package/ffmpeg/ffmpeg.mk	2018-01-11 09:01:58.939646264 +0100
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FFMPEG_VERSION = 3.3.5
++FFMPEG_VERSION = 2.8.7
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
+@@ -38,12 +38,9 @@
+ 	--disable-dxva2 \
+ 	--enable-runtime-cpudetect \
+ 	--disable-hardcoded-tables \
+-	--disable-mipsdsp \
+ 	--disable-mipsdspr2 \
+ 	--disable-msa \
+ 	--enable-hwaccels \
+-	--disable-cuda \
+-	--disable-cuvid \
+ 	--disable-nvenc \
+ 	--disable-avisynth \
+ 	--disable-frei0r \
+@@ -259,7 +256,7 @@
+ 	--extra-cflags=-I$(STAGING_DIR)/usr/include/IL
+ FFMPEG_DEPENDENCIES += rpi-firmware rpi-userland
+ else
+-FFMPEG_CONF_OPTS += --disable-mmal --disable-omx --disable-omx-rpi
++FFMPEG_CONF_OPTS += --disable-mmal 
+ endif
+ 
+ # To avoid a circular dependency only use opencv if opencv itself does
+diff -Naur -x gcc buildroot-2017.11/package/gstreamer1/gst1-imx/gst1-imx.hash P_Gstreamer/package/gstreamer1/gst1-imx/gst1-imx.hash
+--- buildroot-2017.11/package/gstreamer1/gst1-imx/gst1-imx.hash	2017-11-30 22:35:17.000000000 +0100
++++ P_Gstreamer/package/gstreamer1/gst1-imx/gst1-imx.hash	1970-01-01 01:00:00.000000000 +0100
+@@ -1,2 +0,0 @@
+-# locally computed hash
+-sha256 999c093e38768e51d14abbe7836c09b666bcb89f03f34dd3697a6e5b5e4a4086  gst1-imx-0.12.3.tar.gz
+diff -Naur -x gcc buildroot-2017.11/package/gstreamer1/gst1-imx/gst1-imx.mk P_Gstreamer/package/gstreamer1/gst1-imx/gst1-imx.mk
+--- buildroot-2017.11/package/gstreamer1/gst1-imx/gst1-imx.mk	2017-11-30 22:35:17.000000000 +0100
++++ P_Gstreamer/package/gstreamer1/gst1-imx/gst1-imx.mk	2018-01-11 08:53:41.113945492 +0100
+@@ -4,7 +4,8 @@
+ #
+ ################################################################################
+ 
+-GST1_IMX_VERSION = 0.12.3
++#GST1_IMX_VERSION = 0.12.2
++GST1_IMX_VERSION = 0.13.0
+ GST1_IMX_SITE = $(call github,Freescale,gstreamer-imx,$(GST1_IMX_VERSION))
+ 
+ GST1_IMX_LICENSE = LGPL-2.0+
+diff -Naur -x gcc buildroot-2017.11/package/gstreamer1/gst1-libav/gst1-libav.hash P_Gstreamer/package/gstreamer1/gst1-libav/gst1-libav.hash
+--- buildroot-2017.11/package/gstreamer1/gst1-libav/gst1-libav.hash	2017-11-30 22:35:17.000000000 +0100
++++ P_Gstreamer/package/gstreamer1/gst1-libav/gst1-libav.hash	1970-01-01 01:00:00.000000000 +0100
+@@ -1,2 +0,0 @@
+-From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.12.3.tar.xz.sha256sum
+-sha256 015ef8cab6f7fb87c8fb42642486423eff3b6e6a6bccdcd6a189f436a3619650 gst-libav-1.12.3.tar.xz
+diff -Naur -x gcc buildroot-2017.11/package/gstreamer1/gst1-libav/gst1-libav.mk P_Gstreamer/package/gstreamer1/gst1-libav/gst1-libav.mk
+--- buildroot-2017.11/package/gstreamer1/gst1-libav/gst1-libav.mk	2017-11-30 22:35:17.000000000 +0100
++++ P_Gstreamer/package/gstreamer1/gst1-libav/gst1-libav.mk	2018-01-11 08:44:34.043894548 +0100
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GST1_LIBAV_VERSION = 1.12.3
++GST1_LIBAV_VERSION = 1.8.1
+ GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
+ GST1_LIBAV_SITE = https://gstreamer.freedesktop.org/src/gst-libav
+ GST1_LIBAV_CONF_OPTS = --with-system-libav
+diff -Naur -x gcc buildroot-2017.11/package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Support-building-with-openjpeg-2.3-simpler.patch P_Gstreamer/package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Support-building-with-openjpeg-2.3-simpler.patch
+--- buildroot-2017.11/package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Support-building-with-openjpeg-2.3-simpler.patch	2017-11-30 22:35:17.000000000 +0100
++++ P_Gstreamer/package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Support-building-with-openjpeg-2.3-simpler.patch	1970-01-01 01:00:00.000000000 +0100
+@@ -1,89 +0,0 @@
+-From b08b3ad2c4ca27519b34229b7430af5cb73cc7ef Mon Sep 17 00:00:00 2001
+-From: "Jan Alexander Steffens (heftig)" <jan.steffens@gmail.com>
+-Date: Thu, 19 Oct 2017 16:36:17 +0200
+-Subject: [PATCH] openjpeg: Support building with openjpeg 2.3, simpler
+-
+-OpenJPEG 2.3 installs its headers to /usr/include/openjpeg-2.3. However,
+-since libopenjp2.pc seems to provide the right includedir CFLAGS at
+-least since version 2.1, instead of adding yet another version check,
+-just remove the subdir and the check for 2.2.
+-
+-https://bugzilla.gnome.org/show_bug.cgi?id=788703
+-
+-Upstream: https://cgit.freedesktop.org/gstreamer/gst-plugins-bad/commit/?id=bff2d834a4a38f64e555cee3d0144fde6c515acd
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- configure.ac               |  5 -----
+- ext/openjpeg/gstopenjpeg.h |  6 ++----
+- ext/openjpeg/meson.build   | 20 +++++++-------------
+- 3 files changed, 9 insertions(+), 22 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 7a8d752..f9727ac 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -2815,11 +2815,6 @@ AG_GST_CHECK_FEATURE(OPENJPEG, [openjpeg library], openjpeg, [
+-     AG_GST_PKG_CHECK_MODULES(OPENJPEG_2_1, libopenjp2 >= 2.1)
+-     if test x"$HAVE_OPENJPEG_2_1" = x"yes"; then
+-       AC_DEFINE([HAVE_OPENJPEG_2_1], 1, [Define if OpenJPEG 2.1 is used])
+--        dnl include paths changed for v2.2
+--        AG_GST_PKG_CHECK_MODULES(OPENJPEG_2_2, libopenjp2 >= 2.2)
+--        if test x"$HAVE_OPENJPEG_2_2" = x"yes"; then
+--          AC_DEFINE([HAVE_OPENJPEG_2_2], 1, [Define if OpenJPEG 2.2 is used])
+--        fi
+-     fi
+-   else
+-     # Fallback to v1.5
+-diff --git a/ext/openjpeg/gstopenjpeg.h b/ext/openjpeg/gstopenjpeg.h
+-index 52410a4..f9ca74a 100644
+---- a/ext/openjpeg/gstopenjpeg.h
+-+++ b/ext/openjpeg/gstopenjpeg.h
+-@@ -38,10 +38,8 @@
+- #define OPJ_CPRL CPRL
+- #else
+- #include <stdio.h>
+--# if defined(HAVE_OPENJPEG_2_2)
+--#  include <openjpeg-2.2/openjpeg.h>
+--# elif defined(HAVE_OPENJPEG_2_1)
+--#  include <openjpeg-2.1/openjpeg.h>
+-+# if defined(HAVE_OPENJPEG_2_1)
+-+#  include <openjpeg.h>
+- # else
+- #  include <openjpeg-2.0/openjpeg.h>
+- # endif
+-diff --git a/ext/openjpeg/meson.build b/ext/openjpeg/meson.build
+-index 0d97ebb..14b8583 100644
+---- a/ext/openjpeg/meson.build
+-+++ b/ext/openjpeg/meson.build
+-@@ -6,21 +6,15 @@ openjpeg_sources = [
+- 
+- openjpeg_cargs = []
+- 
+--# Check for 2.2, 2.1, then 2.0
+--openjpeg_dep = dependency('libopenjp2', version : '>=2.2', required : false)
+-+# Check for 2.1, then 2.0, then 1.5
+-+openjpeg_dep = dependency('libopenjp2', version : '>=2.1', required : false)
+- if openjpeg_dep.found()
+--  openjpeg_cargs += ['-DHAVE_OPENJPEG_2_2', '-DHAVE_OPENJPEG_2_1']
+-+  openjpeg_cargs += ['-DHAVE_OPENJPEG_2_1']
+- else
+--  openjpeg_dep = dependency('libopenjp2', version : '>=2.1', required : false)
+--  if openjpeg_dep.found()
+--    openjpeg_cargs += ['-DHAVE_OPENJPEG_2_1']
+--  else
+--    openjpeg_dep = dependency('libopenjp2', required : false)
+--    # Fallback to 1.5
+--    if not openjpeg_dep.found()
+--      openjpeg_dep = dependency('libopenjpeg1', required : false)
+--      openjpeg_cargs += ['-DHAVE_OPENJPEG_1']
+--    endif
+-+  openjpeg_dep = dependency('libopenjp2', required : false)
+-+  if not openjpeg_dep.found()
+-+    openjpeg_dep = dependency('libopenjpeg1', required : false)
+-+    openjpeg_cargs += ['-DHAVE_OPENJPEG_1']
+-   endif
+- endif
+- 
+--- 
+-2.14.2
+-
+diff -Naur -x gcc buildroot-2017.11/package/gstreamer1/gst1-plugins-bad/0001-use-gettext-0.18.patch P_Gstreamer/package/gstreamer1/gst1-plugins-bad/0001-use-gettext-0.18.patch
+--- buildroot-2017.11/package/gstreamer1/gst1-plugins-bad/0001-use-gettext-0.18.patch	1970-01-01 01:00:00.000000000 +0100
++++ P_Gstreamer/package/gstreamer1/gst1-plugins-bad/0001-use-gettext-0.18.patch	2018-01-11 09:42:35.882582612 +0100
+@@ -0,0 +1,17 @@
++Use newer version of gettext to match current buildroot gettext.
++
++Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
++----
++Index: gst1-plugins-bad-1.1.1/po/Makefile.in.in
++===================================================================
++--- gst1-plugins-bad-1.1.1.orig/po/Makefile.in.in
+++++ gst1-plugins-bad-1.1.1/po/Makefile.in.in
++@@ -9,7 +9,7 @@
++ # General Public License and is *not* in the public domain.
++ #
++ # Origin: gettext-0.17
++-GETTEXT_MACRO_VERSION = 0.17
+++GETTEXT_MACRO_VERSION = 0.18
++ 
++ PACKAGE = @PACKAGE@
++ VERSION = @VERSION@
+diff -Naur -x gcc buildroot-2017.11/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash P_Gstreamer/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
+--- buildroot-2017.11/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash	2017-11-30 22:35:17.000000000 +0100
++++ P_Gstreamer/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash	1970-01-01 01:00:00.000000000 +0100
+@@ -1,2 +0,0 @@
+-From https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.12.3.tar.xz.sha256sum
+-sha256 36d059761852bed0f1a7fcd3ef64a8aeecab95d2bca53cd6aa0f08054b1cbfec gst-plugins-bad-1.12.3.tar.xz
+diff -Naur -x gcc buildroot-2017.11/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk P_Gstreamer/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+--- buildroot-2017.11/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk	2017-11-30 22:35:17.000000000 +0100
++++ P_Gstreamer/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk	2018-01-11 08:44:47.525967146 +0100
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GST1_PLUGINS_BAD_VERSION = 1.12.3
++GST1_PLUGINS_BAD_VERSION = 1.8.1
+ GST1_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST1_PLUGINS_BAD_VERSION).tar.xz
+ GST1_PLUGINS_BAD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-bad
+ GST1_PLUGINS_BAD_INSTALL_STAGING = YES
+diff -Naur -x gcc buildroot-2017.11/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash P_Gstreamer/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
+--- buildroot-2017.11/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash	2017-11-30 22:35:17.000000000 +0100
++++ P_Gstreamer/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash	1970-01-01 01:00:00.000000000 +0100
+@@ -1,2 +0,0 @@
+-From https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.12.3.tar.xz.sha256sum
+-sha256 d3d37b8489d37fa0018973d850bd2067b98af335fef2fa543ee7d40359e3cea5 gst-plugins-base-1.12.3.tar.xz
+diff -Naur -x gcc buildroot-2017.11/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk P_Gstreamer/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+--- buildroot-2017.11/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk	2017-11-30 22:35:17.000000000 +0100
++++ P_Gstreamer/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk	2018-01-11 08:44:55.947012493 +0100
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GST1_PLUGINS_BASE_VERSION = 1.12.3
++GST1_PLUGINS_BASE_VERSION = 1.8.1
+ GST1_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST1_PLUGINS_BASE_VERSION).tar.xz
+ GST1_PLUGINS_BASE_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-base
+ GST1_PLUGINS_BASE_INSTALL_STAGING = YES
+diff -Naur -x gcc buildroot-2017.11/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash P_Gstreamer/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
+--- buildroot-2017.11/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash	2017-11-30 22:35:17.000000000 +0100
++++ P_Gstreamer/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash	1970-01-01 01:00:00.000000000 +0100
+@@ -1,2 +0,0 @@
+-From https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.12.3.tar.xz.sha256sum
+-sha256 13e7f479296891fef5a686438f20ba7d534680becf2269ecc5ee24aa83b45f03 gst-plugins-good-1.12.3.tar.xz
+diff -Naur -x gcc buildroot-2017.11/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk P_Gstreamer/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+--- buildroot-2017.11/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk	2017-11-30 22:35:17.000000000 +0100
++++ P_Gstreamer/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk	2018-01-11 08:45:04.573058941 +0100
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GST1_PLUGINS_GOOD_VERSION = 1.12.3
++GST1_PLUGINS_GOOD_VERSION = 1.8.1
+ GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
+ GST1_PLUGINS_GOOD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-good
+ GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
+diff -Naur -x gcc buildroot-2017.11/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash P_Gstreamer/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
+--- buildroot-2017.11/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash	2017-11-30 22:35:17.000000000 +0100
++++ P_Gstreamer/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash	1970-01-01 01:00:00.000000000 +0100
+@@ -1,2 +0,0 @@
+-From https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.12.3.tar.xz.sha256sum
+-sha256 e88ca584c94ea78eeecbf3af00ef7f134b66bdee7408aa4aa6c547235e060052 gst-plugins-ugly-1.12.3.tar.xz
+diff -Naur -x gcc buildroot-2017.11/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk P_Gstreamer/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+--- buildroot-2017.11/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk	2017-11-30 22:35:17.000000000 +0100
++++ P_Gstreamer/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk	2018-01-11 08:45:12.774103102 +0100
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GST1_PLUGINS_UGLY_VERSION = 1.12.3
++GST1_PLUGINS_UGLY_VERSION = 1.8.1
+ GST1_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST1_PLUGINS_UGLY_VERSION).tar.xz
+ GST1_PLUGINS_UGLY_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-ugly
+ GST1_PLUGINS_UGLY_LICENSE_FILES = COPYING
+diff -Naur -x gcc buildroot-2017.11/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash P_Gstreamer/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
+--- buildroot-2017.11/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash	2017-11-30 22:35:17.000000000 +0100
++++ P_Gstreamer/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash	1970-01-01 01:00:00.000000000 +0100
+@@ -1,2 +0,0 @@
+-From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.12.3.tar.xz.sha256sum
+-sha256 67255971bb16029a01de66b9f9687f20d8dbf3d3bd75feb48605d0723a7c74ec gst-rtsp-server-1.12.3.tar.xz
+diff -Naur -x gcc buildroot-2017.11/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk P_Gstreamer/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
+--- buildroot-2017.11/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk	2017-11-30 22:35:17.000000000 +0100
++++ P_Gstreamer/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk	2018-01-11 08:45:20.691147867 +0100
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GST1_RTSP_SERVER_VERSION = 1.12.3
++GST1_RTSP_SERVER_VERSION = 1.8.1
+ GST1_RTSP_SERVER_SOURCE = gst-rtsp-server-$(GST1_RTSP_SERVER_VERSION).tar.xz
+ GST1_RTSP_SERVER_SITE = http://gstreamer.freedesktop.org/src/gst-rtsp-server
+ GST1_RTSP_SERVER_LICENSE = LGPL-2.0+
+diff -Naur -x gcc buildroot-2017.11/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash P_Gstreamer/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
+--- buildroot-2017.11/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash	2017-11-30 22:35:17.000000000 +0100
++++ P_Gstreamer/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash	1970-01-01 01:00:00.000000000 +0100
+@@ -1,2 +0,0 @@
+-From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.12.3.tar.xz.sha256sum
+-sha256 f4cdafd8fd9606a490917c8b67336e835df1219580d55421c70480fd0913744d gstreamer-vaapi-1.12.3.tar.xz
+diff -Naur -x gcc buildroot-2017.11/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk P_Gstreamer/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
+--- buildroot-2017.11/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk	2017-11-30 22:35:17.000000000 +0100
++++ P_Gstreamer/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk	2018-01-11 08:45:28.243196106 +0100
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GST1_VAAPI_VERSION = 1.12.3
++GST1_VAAPI_VERSION = 1.8.1
+ GST1_VAAPI_SITE = https://gstreamer.freedesktop.org/src/gstreamer-vaapi
+ GST1_VAAPI_SOURCE = gstreamer-vaapi-$(GST1_VAAPI_VERSION).tar.xz
+ GST1_VAAPI_LICENSE = LGPL-2.1+
+diff -Naur -x gcc buildroot-2017.11/package/gstreamer1/gst1-validate/gst1-validate.hash P_Gstreamer/package/gstreamer1/gst1-validate/gst1-validate.hash
+--- buildroot-2017.11/package/gstreamer1/gst1-validate/gst1-validate.hash	2017-11-30 22:35:17.000000000 +0100
++++ P_Gstreamer/package/gstreamer1/gst1-validate/gst1-validate.hash	1970-01-01 01:00:00.000000000 +0100
+@@ -1,2 +0,0 @@
+-From https://gstreamer.freedesktop.org/src/gst-validate/gst-validate-1.12.3.tar.xz.sha256sum
+-sha256 5139949d20274fdd702492438eeab2c9e55aa82f60aca17db27ebd3faf08489e gst-validate-1.12.3.tar.xz
+diff -Naur -x gcc buildroot-2017.11/package/gstreamer1/gst1-validate/gst1-validate.mk P_Gstreamer/package/gstreamer1/gst1-validate/gst1-validate.mk
+--- buildroot-2017.11/package/gstreamer1/gst1-validate/gst1-validate.mk	2017-11-30 22:35:17.000000000 +0100
++++ P_Gstreamer/package/gstreamer1/gst1-validate/gst1-validate.mk	2018-01-11 08:45:36.267247357 +0100
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GST1_VALIDATE_VERSION = 1.12.3
++GST1_VALIDATE_VERSION = 1.8.1
+ GST1_VALIDATE_SOURCE = gst-validate-$(GST1_VALIDATE_VERSION).tar.xz
+ GST1_VALIDATE_SITE = https://gstreamer.freedesktop.org/src/gst-validate
+ GST1_VALIDATE_LICENSE = LGPL-2.1+
+diff -Naur -x gcc buildroot-2017.11/package/gstreamer1/gst-omx/gst-omx.hash P_Gstreamer/package/gstreamer1/gst-omx/gst-omx.hash
+--- buildroot-2017.11/package/gstreamer1/gst-omx/gst-omx.hash	2017-11-30 22:35:17.000000000 +0100
++++ P_Gstreamer/package/gstreamer1/gst-omx/gst-omx.hash	1970-01-01 01:00:00.000000000 +0100
+@@ -1,2 +0,0 @@
+-From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.12.3.tar.xz.sha256sum
+-sha256 eef5de8bab1bb495bfbc9d16af9837d7f55b47cb6b97819b3152c5899c85843c gst-omx-1.12.3.tar.xz
+diff -Naur -x gcc buildroot-2017.11/package/gstreamer1/gst-omx/gst-omx.mk P_Gstreamer/package/gstreamer1/gst-omx/gst-omx.mk
+--- buildroot-2017.11/package/gstreamer1/gst-omx/gst-omx.mk	2017-11-30 22:35:17.000000000 +0100
++++ P_Gstreamer/package/gstreamer1/gst-omx/gst-omx.mk	2018-01-11 08:45:44.731301424 +0100
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GST_OMX_VERSION = 1.12.3
++GST_OMX_VERSION = 1.8.1
+ GST_OMX_SOURCE = gst-omx-$(GST_OMX_VERSION).tar.xz
+ GST_OMX_SITE = https://gstreamer.freedesktop.org/src/gst-omx
+ 
+diff -Naur -x gcc buildroot-2017.11/package/gstreamer1/gstreamer1/gstreamer1.hash P_Gstreamer/package/gstreamer1/gstreamer1/gstreamer1.hash
+--- buildroot-2017.11/package/gstreamer1/gstreamer1/gstreamer1.hash	2017-11-30 22:35:17.000000000 +0100
++++ P_Gstreamer/package/gstreamer1/gstreamer1/gstreamer1.hash	1970-01-01 01:00:00.000000000 +0100
+@@ -1,2 +0,0 @@
+-From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.12.3.tar.xz.sha256sum
+-sha256 d388f492440897f02b01eebb033ca2d41078a3d85c0eddc030cdea5a337a216e gstreamer-1.12.3.tar.xz
+diff -Naur -x gcc buildroot-2017.11/package/gstreamer1/gstreamer1/gstreamer1.mk P_Gstreamer/package/gstreamer1/gstreamer1/gstreamer1.mk
+--- buildroot-2017.11/package/gstreamer1/gstreamer1/gstreamer1.mk	2017-11-30 22:35:17.000000000 +0100
++++ P_Gstreamer/package/gstreamer1/gstreamer1/gstreamer1.mk	2018-01-11 08:45:55.999373398 +0100
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GSTREAMER1_VERSION = 1.12.3
++GSTREAMER1_VERSION = 1.8.1
+ GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
+ GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
+ GSTREAMER1_INSTALL_STAGING = YES
