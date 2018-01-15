@@ -11,7 +11,7 @@ p
 
 +192M
 t
-b
+83
 n
 p
 3
@@ -33,7 +33,7 @@ p
 
 +192M
 t
-b
+83
 n
 p
 3
@@ -64,7 +64,7 @@ p
 
 +192M
 t
-b
+83
 n
 p
 3
@@ -95,7 +95,7 @@ __EOF__
 fi
 sync
 sleep 1
-echo y | sudo mkfs.vfat -F 16 ${DISK}1 -n BOOT 
+echo y | sudo mkfs.ext3 -t ext3 -L Boot ${DISK}1
 RET=$?
 echo "mkfs.vfat returned $RET"
 if ! [ "$?" = "0" ]; then

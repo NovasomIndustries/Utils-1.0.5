@@ -21,6 +21,8 @@ case $3 in
 	;;
 	"M8") echo "REFERENCE_SERVER=${2}" > board/novasis/NOVAsomM8/Init/etc/sysconfig/system_vars
 	;;
+	"M9") echo "REFERENCE_SERVER=${2}" > board/novasis/NOVAsomM9/Init/etc/sysconfig/system_vars
+	;;
 esac
 
 [ -d output/target/etc/sysconfig/system_vars ] && echo "REFERENCE_SERVER=${2}" > output/target/etc/sysconfig/system_vars

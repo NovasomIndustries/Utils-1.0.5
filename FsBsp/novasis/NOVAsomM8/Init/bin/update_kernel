@@ -6,7 +6,7 @@ get_exec apq8016-sbc.dtb
 rm -rf /tmp/update_dir
 mkdir /tmp/update_dir
 mount /dev/mmcblk1p9 /tmp/update_dir
-cp /tmp/Image /tmp/update_dir/NOVAboot.       
-cp /tmp/apq8016-sbc.dtb /tmp/update_dir/NOVAboot.
+cp /tmp/Image /tmp/update_dir/NOVAboot/.
+cp /tmp/apq8016-sbc.dtb /tmp/update_dir/NOVAboot/.
 umount /tmp/update_dir
 
