@@ -1,5 +1,5 @@
 #!/bin/sh
-UPD_ELEMENTS="Bootloader/u-boot-novasomM8-2017.11 Bootloader/u-boot-novasomP-2015.04 Bootloader/u-boot-novasomU-2016.03 Kernel/linux-imx_4.1.15_1.2.0_ga Kernel/linux-imx_4.1.43 Kernel/linux-4.11.0-QualcommLinaro"
+UPD_ELEMENTS="Bootloader/u-boot-novasomM8-2017.11 Bootloader/u-boot-novasomP-2015.04 Bootloader/u-boot-novasomU-2016.03 Kernel/linux-imx_4.1.15_1.2.0_ga Kernel/linux-imx_4.1.43 Kernel/linux-4.11.0-QualcommLinaro Kernel/linux-allw-4.14.0"
 DIRS="${UPD_ELEMENTS} Doc Utils Qt/NOVAembed"
 
 REPOCOUNT=`echo "$DIRS" | awk '{print NF}'`
