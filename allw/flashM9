@@ -14,7 +14,7 @@ DISK=${4}
 
 SPL_FILE="/Devel/NOVAsom_SDK/Bootloader/u-boot-NOVAsomH5-2017.11/spl/sunxi-spl.bin"
 UBOOT_IMG="/Devel/NOVAsom_SDK/Bootloader/u-boot-NOVAsomH5-2017.11/u-boot.itb"
-KERNEL="/Devel/NOVAsom_SDK/Kernel/linux-allw-4.14.0/arch/arm64/boot/Image"
+KERNEL="/Devel/NOVAsom_SDK/Blobs/linux-allw-4.14.0_Image"
 DTB_FILE="/Devel/NOVAsom_SDK/Kernel/linux-allw-4.14.0/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-prime.dtb"
 UINITRD="/Devel/NOVAsom_SDK/Deploy/uInitrd"
 NOVASOMPARAMS="/Devel/NOVAsom_SDK/Utils/BootParameters/$7"
@@ -68,7 +68,7 @@ sudo cp ${UBOOT_IMG} tmpmount/NOVAboot/.
 [ "$?" != "0" ] && exit
 echo "Done"
 echo -n "Copying `basename ${KERNEL}` ..."
-sudo cp ${KERNEL} tmpmount/NOVAboot/.
+sudo cp ${KERNEL} tmpmount/NOVAboot/Image
 [ "$?" != "0" ] && exit
 echo "Done"
 echo -n "Copying `basename ${DTB_FILE}` ..."

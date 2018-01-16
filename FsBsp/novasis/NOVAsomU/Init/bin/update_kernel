@@ -1,10 +1,10 @@
 #!/bin/sh
-get_exec zImage
+get_exec U_zImage
 get_exec novasomu.dtb
 get_exec NOVAsomParams
 mkdir /tmp/update_dir
 mount /dev/mmcblk0p1 /tmp/update_dir
-cp /tmp/zImage /tmp/update_dir/.       
+cp /tmp/U_zImage /tmp/update_dir/zImage
 cp /tmp/novasomu.dtb /tmp/update_dir/.
 cp /tmp/NOVAsomParams /tmp/update_dir/.
 umount /tmp/update_dir

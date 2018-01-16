@@ -11,4 +11,9 @@ echo "1" > /tmp/result
 [ ! "$?" = "0" ] && exit
 make -j32 modules
 [ ! "$?" = "0" ] && exit
+if [ "$KERNEL" = "linux-imx_4.1.15_1.2.0_ga" ]; then
+	cp arch/arm/boot/zImage ../../Blobs/linux-nxp_p-4.1.15.2_zImage
+else
+	cp arch/arm/boot/zImage ../../Blobs/linux-nxp_u-4.1.43_zImage
+fi
 echo "0" > /tmp/result

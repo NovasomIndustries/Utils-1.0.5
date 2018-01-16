@@ -14,7 +14,7 @@ DISK=${4}
 
 SPL_FILE="/Devel/NOVAsom_SDK/Bootloader/u-boot-novasomP-2015.04/NOVAsomP/SPL"
 UBOOT_IMG="/Devel/NOVAsom_SDK/Bootloader/u-boot-novasomP-2015.04/NOVAsomP/u-boot.img"
-KERNEL="/Devel/NOVAsom_SDK/Kernel/linux-imx_4.1.15_1.2.0_ga/arch/arm/boot/zImage"
+KERNEL="/Devel/NOVAsom_SDK/Blobs/linux-nxp_p-4.1.15.2_zImage"
 DTB_FILESDL="/Devel/NOVAsom_SDK/DtbUserWorkArea/${5}"
 DTB_FILEQ="/Devel/NOVAsom_SDK/DtbUserWorkArea/${6}"
 UINITRD="/Devel/NOVAsom_SDK/Deploy/uInitrd"
@@ -68,7 +68,7 @@ sudo cp ${UBOOT_IMG} tmpmount/.
 [ "$?" != "0" ] && exit
 echo "Done"
 echo -n "Copying `basename ${KERNEL}` ..."
-sudo cp ${KERNEL} tmpmount/.
+sudo cp ${KERNEL} tmpmount/zImage
 [ "$?" != "0" ] && exit
 echo "Done"
 echo -n "Copying `basename ${UINITRD}` ..."

@@ -106,7 +106,7 @@ sudo cp ${UBOOT_IMX} tmpmount/.
 [ "$?" != "0" ] && exit
 echo "Done"
 echo -n "Copying zImage ..."
-sudo cp ${KERNEL} tmpmount/.
+sudo cp ${KERNEL} tmpmount/zImage
 [ "$?" != "0" ] && exit
 echo "Done"
 echo -n "Copying uInitrd ..."
