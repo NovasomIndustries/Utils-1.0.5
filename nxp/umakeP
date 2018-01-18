@@ -1,5 +1,5 @@
 #!/bin/sh
-. ./SourceMe32_5
+. ../SourceMe32_5
 BOOT_P="/Devel/NOVAsom_SDK/Bootloader/u-boot-novasomP-2015.04"
 echo "1" > /tmp/result
 cd ${BOOT_P}
