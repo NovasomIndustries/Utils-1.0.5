@@ -13,7 +13,7 @@ COUNTSENT=0
 INCREMENT=1
 echo ""
 for i in ${KERNELS}; do
-	if [ -d ${i} ]; then
+	if [ -d ../${i} ]; then
 		DIRS="${DIRS} ${i}"
 	else
 		printf "${RED}Skipping ${i} as not present${NC}\n"
