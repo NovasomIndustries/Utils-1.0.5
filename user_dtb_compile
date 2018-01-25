@@ -1,4 +1,7 @@
 #!/bin/sh
+#
+# $1 = input file 
+# $2 = board, can be P or U
 echo "1" > /tmp/result
 [ "$1" = "" ] && echo "No input file given"
 [ "$1" = "" ] && exit
@@ -6,17 +9,20 @@ INFILE=$1
 DTS_INFILE=${INFILE}.dts
 DTS_TMP=${INFILE}.tmp.dts
 DTB_OUTFILE=${INFILE}.dtb
+
 FOUND="0"
 if [ "$2" = "P" ]; then
-	DTC_EXEC="/Devel/NOVAsom_SDK/Kernel/linux-imx_4.1.15_1.2.0_ga/scripts/dtc/dtc"
+	DTC_EXEC="dtc"
 	WORKAREA_LOCATION="/Devel/NOVAsom_SDK/DtbUserWorkArea"
+	KERNEL="linux-imx_4.1.15_1.2.0_ga"
 	KERNEL_LOCATION="/Devel/NOVAsom_SDK/Kernel/linux-imx_4.1.15_1.2.0_ga/arch/arm/boot/dts"
 	STD_FILES="imx6q.dtsi imx6dl.dtsi imx6dl-pinfunc.h imx6qdl.dtsi skeleton.dtsi imx6q-pinfunc.h"
 	FOUND="1"
 fi
 if [ "$2" = "U" ]; then
-	DTC_EXEC="/Devel/NOVAsom_SDK/Kernel/linux-imx_4.1.43/scripts/dtc/dtc"
+	DTC_EXEC="dtc"
 	WORKAREA_LOCATION="/Devel/NOVAsom_SDK/DtbUserWorkArea"
+	KERNEL="linux-imx_4.1.43"
 	KERNEL_LOCATION="/Devel/NOVAsom_SDK/Kernel/linux-imx_4.1.43/arch/arm/boot/dts"
 	STD_FILES="imx6dl.dtsi imx6dl-pinfunc.h imx6qdl.dtsi skeleton.dtsi imx6ull.dtsi imx6ull-pinfunc.h imx6ul-pinfunc.h imx6ull-pinfunc-snvs.h "
 	FOUND="1"
