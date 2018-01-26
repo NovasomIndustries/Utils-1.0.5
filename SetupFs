@@ -59,7 +59,7 @@ cd /Devel/NOVAsom_SDK/FileSystem
 tar jxf ${BR}.tar.bz2
 mv ${BR} ${1}
 cd ${1}
-cp -r /Devel/NOVAsom_SDK/${BSP_DIR}/novasis board/novasis
+cp -r /Devel/NOVAsom_SDK/Utils/${BSP_DIR}/novasis board/novasis
 PATCH_FILES=`ls /Devel/NOVAsom_SDK/Utils/${PATCH_DIR}/*.patch`
 for i in ${PATCH_FILES}; do
         patch -p1 -f --quiet < ${i}
