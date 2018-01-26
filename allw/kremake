@@ -6,8 +6,8 @@
 KERNEL=$1
 SOURCEMEFILE=$2
 DEFCONFIGFILE=$3
-. ./${SOURCEMEFILE}
-cd ../Kernel/${KERNEL}
+. /Devel/NOVAsom_SDK/Utils/${SOURCEMEFILE}
+cd /Devel/NOVAsom_SDK/Kernel/${KERNEL}
 echo "1" > /tmp/result
 make mrproper
 make ${DEFCONFIGFILE}
