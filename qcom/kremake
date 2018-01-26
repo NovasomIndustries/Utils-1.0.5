@@ -1,0 +1,20 @@
+#!/bin/sh
+# $1 = kernel
+# $2 = source me file
+# $3 = defconfig file
+
+KERNEL=$1
+SOURCEMEFILE=$2
+DEFCONFIGFILE=$3
+. ./${SOURCEMEFILE}
+cd ../Kernel/${KERNEL}
+echo "1" > /tmp/result
+make mrproper
+make ${DEFCONFIGFILE}
+[ ! "$?" = "0" ] && exit
+make -j32 zImage
+[ ! "$?" = "0" ] && exit
+make -j32 modules
+[ ! "$?" = "0" ] && exit
+cp arch/arm64/boot/Image ../../Blobs/linux-qualcomm-4.11.0_Image
+echo "0" > /tmp/result
