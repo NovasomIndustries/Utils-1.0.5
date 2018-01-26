@@ -55,21 +55,18 @@ fi
 echo ${BUILDROOT_CFG_BASE}
 echo ${BUSYBOX_CFG_BASE}
 
-cd ../FileSystem
+cd /Devel/NOVAsom_SDK/FileSystem
 tar jxf ${BR}.tar.bz2
 mv ${BR} ${1}
 cd ${1}
-cp -r ../../Utils/${BSP_DIR}/novasis board/novasis
-PATCH_FILES=`ls ../../Utils/${PATCH_DIR}/*.patch`
+cp -r /Devel/NOVAsom_SDK/${BSP_DIR}/novasis board/novasis
+PATCH_FILES=`ls /Devel/NOVAsom_SDK/Utils/${PATCH_DIR}/*.patch`
 for i in ${PATCH_FILES}; do
         patch -p1 -f --quiet < ${i}
 done
 
-echo `pwd`
-cp ../../Utils/Configurations/${BUILDROOT_CFG_BASE} .config
-echo "cp ../../Utils/Configurations/${BUILDROOT_CFG_BASE} .config"
-cp ../../Utils/Configurations/${BUSYBOX_CFG_BASE} BusyBox.config
-echo "cp ../../Utils/Configurations/${BUSYBOX_CFG_BASE} BusyBox.config"
+cp /Devel/NOVAsom_SDK/Utils/Configurations/${BUILDROOT_CFG_BASE} .config
+cp /Devel/NOVAsom_SDK/Utils/Configurations/${BUSYBOX_CFG_BASE} BusyBox.config
 
 subst_config "BR2_TARGET_GENERIC_HOSTNAME" ${1}
 subst_config "BR2_TARGET_GENERIC_ISSUE" "Welcome"
