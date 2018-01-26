@@ -15,9 +15,9 @@ INCREMENT=1
 
 novaembed()
 {
-	cd /Devel/NOVAsom_SDK/Qt/NOVAembed/build-NOVAembed-Desktop-Debug
+	cd /Devel/NOVAsom_SDK/Qt/build-NOVAembed-Desktop-Debug
 	make distclean
-	/usr/lib/x86_64-linux-gnu/qt5/bin/qmake /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed.pro -r -spec linux-g++-64 CONFIG+=debug
+	/usr/lib64/qt5/bin/qmake /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed.pro -r -spec linux-g++-64 CONFIG+=debug
 	make
 	cd /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed_P_Parser
 	rm -rf obj bin
