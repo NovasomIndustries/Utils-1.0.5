@@ -57,7 +57,7 @@ echo y | sudo mkfs.ext3 ${DISK}9 >/dev/null 2>&1
 sync
 echo "Done"
 echo -n "Creating partition 10:configpart ..."
-sudo sgdisk -a 1 -n 10::+16M -c 10:configpart  ${DISK} >/dev/null 2>&1
+sudo sgdisk -a 1 -n 10::+64M -c 10:configpart  ${DISK} >/dev/null 2>&1
 sync
 echo y | sudo mkfs.ext3 ${DISK}10 >/dev/null 2>&1
 sync
