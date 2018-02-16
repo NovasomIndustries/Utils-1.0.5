@@ -10,7 +10,7 @@ if ! [ -f $1.tar.bz2 ]; then
 	rm -rf temp
 	mkdir temp
 	cd temp
-	wget http://$2/Kernels/$1.tar.bz2 -o /Devel/NOVAsom_SDK/Logs/wget_log
+	wget http://$2/$1.tar.bz2 -o /Devel/NOVAsom_SDK/Logs/wget_log
 	if [ "$?" = "0" ]; then
 		mv $1.tar.bz2 ..
 	else
