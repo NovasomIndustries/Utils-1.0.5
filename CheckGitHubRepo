@@ -104,11 +104,11 @@ if [ ! -d /Devel/NOVAsom_SDK/Qt/NOVAembed ]; then
 	cd ${HERE} 
 fi
 
-#for i in ${KERNEL_ELEMENTS}; do
-#	if [ -d /Devel/NOVAsom_SDK/${i} ]; then
-#		DIRS="${DIRS} ${i}"
-#	fi
-#done
+for i in ${KERNEL_ELEMENTS}; do
+	if [ -d /Devel/NOVAsom_SDK/${i} ]; then
+		DIRS="${DIRS} ${i}"
+	fi
+done
 
 for i in ${DIRS}; do
 	gitloop /Devel/NOVAsom_SDK/$i
