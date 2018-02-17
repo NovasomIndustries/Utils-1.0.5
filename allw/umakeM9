@@ -3,7 +3,6 @@
 BOOT_P="/Devel/NOVAsom_SDK/Bootloader/u-boot-NOVAsomH5-2017.11"
 echo "1" > /tmp/result
 cd ${BOOT_P}
-export KBUILD_OUTPUT=./H5
 make distclean
 [ "$?" != "0" ] && exit
 make mrproper
