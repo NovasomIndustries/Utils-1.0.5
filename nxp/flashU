@@ -13,7 +13,7 @@
 KERNEL="/Devel/NOVAsom_SDK/Kernel/linux-imx_4.1.43/arch/arm/boot/zImage"
 BOOTLOADER="/Devel/NOVAsom_SDK/Bootloader/u-boot-novasomU-2016.03"
 UINITRD="/Devel/NOVAsom_SDK/Deploy/uInitrd"
-UBOOT_IMX="${BOOTLOADER}/NOVAsomU/u-boot.imx"
+UBOOT_IMX="${BOOTLOADER}/u-boot.imx"
 DISK=${4}
 DTB="/Devel/NOVAsom_SDK/DtbUserWorkArea/${5}.dtb"
 NOVASOMPARAMS="/Devel/NOVAsom_SDK/Utils/BootParameters/$6"

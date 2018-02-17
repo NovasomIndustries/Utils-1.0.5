@@ -3,7 +3,6 @@
 BOOT_P="/Devel/NOVAsom_SDK/Bootloader/u-boot-novasomP-2015.04"
 echo "1" > /tmp/result
 cd ${BOOT_P}
-export KBUILD_OUTPUT=./NOVAsomP
 make distclean
 [ "$?" != "0" ] && exit
 make mrproper
@@ -14,6 +13,6 @@ make -j32
 [ "$?" != "0" ] && exit
 cd /Devel/NOVAsom_SDK/Deploy
 rm -f u-boot.img SPL
-ln -s ${BOOT_P}/NOVAsomP/u-boot.img
-ln -s ${BOOT_P}/NOVAsomP/SPL
+ln -s ${BOOT_P}/u-boot.img
+ln -s ${BOOT_P}/SPL
 echo "0" > /tmp/result

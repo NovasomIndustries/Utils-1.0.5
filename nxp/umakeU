@@ -2,7 +2,6 @@
 . ../SourceMe32_5
 echo "1" > /tmp/result
 cd /Devel/NOVAsom_SDK/Bootloader/u-boot-novasomU-2016.03
-export KBUILD_OUTPUT=../u-boot-novasomU-2016.03/NOVAsomU
 make distclean
 make mrproper
 make novasomu_defconfig
