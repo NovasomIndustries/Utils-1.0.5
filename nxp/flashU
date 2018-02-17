@@ -114,7 +114,7 @@ sudo cp ${UINITRD} tmpmount/.
 [ "$?" != "0" ] && exit
 echo "Done"
 echo -n "Copying `basename ${NOVASOMPARAMS}` ..."
-echo "setramsize=setenv rdsize ${RAMDISK_SIZE}" > ../Deploy/NOVAsomParams
+echo "setramsize=setenv rdsize ${RAMDISK_SIZE}" > ${DEPLOY_DIR}/NOVAsomParams
 cat ${NOVASOMPARAMS} >> ${DEPLOY_DIR}/NOVAsomParams
 sudo cp ${DEPLOY_DIR}/NOVAsomParams tmpmount/NOVAsomParams
 [ "$?" != "0" ] && exit

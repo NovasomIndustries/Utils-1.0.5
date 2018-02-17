@@ -1,7 +1,8 @@
 #!/bin/sh
 UPD_ELEMENTS="Bootloader/u-boot-novasomM8-2017.11 Bootloader/u-boot-novasomP-2015.04 Bootloader/u-boot-novasomU-2016.03"
-KERNEL_ELEMENTS="Kernel/linux-imx_4.1.15_1.2.0_ga Kernel/linux-imx_4.1.43 Kernel/linux-4.11.0-QualcommLinaro Kernel/linux-allw-4.14.0"
-DIRS="${UPD_ELEMENTS} Doc Utils Qt/NOVAembed"
+KERNEL_ELEMENTS="Kernel/linux-imx_4.1.15_1.2.0_ga_1.0.5 Kernel/linux-imx_4.1.43_1.0.5 Kernel/linux-4.11.0-QualcommLinaro_1.0.5 Kernel/linux-allw-4.14.0_1.0.5"
+CODE_ELEMENTS="${UPD_ELEMENTS} ${KERNEL_ELEMENTS}"
+DIRS="${UPD_ELEMENTS} ${KERNEL_ELEMENTS} Doc Utils Qt/NOVAembed"
 
 REPOCOUNT=`echo "$DIRS" | awk '{print NF}'`
 
@@ -38,7 +39,7 @@ novaembed()
 gitloop()
 {
 gitbin="git -C $1"
-#echo "Look for updates in ${1}"
+echo "Look for updates in ${1}"
 echo "Look for updates in ${1}" >> /Devel/NOVAsom_SDK/Logs/update.log
 
 # Fetches from all the remotes, although --all can be replaced with origin
@@ -56,9 +57,6 @@ if [ $($gitbin rev-parse HEAD)>/dev/null 2>&1 != $($gitbin rev-parse @{u})>/dev/
 		if [ "${1}" = "/Devel/NOVAsom_SDK/Qt/NOVAembed" ]; then
 			rm -f /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed/NOVAembed.pro.userOLD
 			mv /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed.pro.user /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed.pro.userOLD
-		fi
-		if [ "${1}" = "/Devel/NOVAsom_SDK/Bootloader/u-boot-novasom-2016.03" ]; then
-			rm -rf /Devel/NOVAsom_SDK/Bootloader/u-boot-novasom-2016.03/NOVAsomU
 		fi
 		git pull origin master >> /Devel/NOVAsom_SDK/Logs/update.log
 		COUNTRECV=`expr $COUNTRECV + $INCREMENT`;
@@ -86,33 +84,29 @@ echo ""
 
 echo "Check on `date`" > /Devel/NOVAsom_SDK/Logs/update.log
 
-for i in ${UPD_ELEMENTS}; do
+for i in ${CODE_ELEMENTS}; do
 	HERE=`pwd`
-	if ! [ -d /Devel/NOVAsom_SDK/${i} ]; then
-		cd `dirname $i`
-		echo "`dirname $i`/`basename $i` not found, cloning"
-		git clone https://github.com/NovasomIndustries/`basename $i`
-	fi
-	cd ${HERE}
+        if ! [ -d /Devel/NOVAsom_SDK/${i} ]; then
+                cd /Devel/NOVAsom_SDK/`dirname $i`
+                echo "`dirname $i`/`basename $i` not found, cloning"
+                git clone https://github.com/NovasomIndustries/`basename $i`
+        fi
+        cd ${HERE}
 done
 
-if [ ! -d /Devel/NOVAsom_SDK/Qt/NOVAembed ]; then
+if ! [ -d /Devel/NOVAsom_SDK/Qt/NOVAembed ]; then
 	HERE=`pwd`
 	cd /Devel/NOVAsom_SDK/Qt
+	echo " NOVAembed not found, cloning"
 	git clone https://github.com/NovasomIndustries/NOVAembed.git
 	novaembed
 	cd ${HERE} 
 fi
 
-for i in ${KERNEL_ELEMENTS}; do
-	if [ -d /Devel/NOVAsom_SDK/${i} ]; then
-		DIRS="${DIRS} ${i}"
-	fi
-done
-
 for i in ${DIRS}; do
 	gitloop /Devel/NOVAsom_SDK/$i
 done
+
 echo ""
 [ "${COUNTMODS}" -ge "1" ] && printf "Finished. Found ${RED}${COUNTMODS}${NC} modification(s) , ${RED}${COUNTRECV}${NC} file(s) received from remote to ${GREEN}${REPOCOUNT}${NC} local repos"
 [ "${COUNTMODS}" -le "0" ] && printf "Finished. Found ${GREEN}${COUNTMODS}${NC} modification(s) , ${GREEN}${COUNTRECV}${NC} file(s) received from remote to ${GREEN}${REPOCOUNT}${NC} local repos"
