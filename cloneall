@@ -1,8 +1,29 @@
+#!/bin/sh
 git clone https://github.com/NovasomIndustries/Utils-1.0.5.git
 git clone https://github.com/NovasomIndustries/Xcompiler-1.0.5.git
 
 cd Qt
 git clone https://github.com/NovasomIndustries/NOVAembed-1.0.5.git
+HERE=`pwd`
+cd /Devel/NOVAsom_SDK/Qt/build-NOVAembed-Desktop-Debug
+make distclean
+/usr/lib64/qt5/bin/qmake /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed.pro -r -spec linux-g++-64 CONFIG+=debug
+make
+cd /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed_P_Parser
+rm -rf obj bin
+mkdir -p obj bin/Debug
+gcc -Wall -g  -c src/dts_gen.c -o obj/dts_gen.o
+gcc -Wall -g  -c src/iomux.c -o obj/iomux.o
+gcc -Wall -g  -c src/main.c -o obj/main.o
+g++  -o bin/Debug/NOVAembed_P_Parser obj/dts_gen.o obj/iomux.o obj/main.o
+cd /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed_U_Parser
+rm -rf obj bin
+mkdir -p obj bin/Debug
+gcc -Wall -g  -c src/dts_gen.c -o obj/dts_gen.o
+gcc -Wall -g  -c src/iomux.c -o obj/iomux.o
+gcc -Wall -g  -c src/main.c -o obj/main.o
+g++  -o bin/Debug/NOVAembed_U_Parser obj/dts_gen.o obj/iomux.o obj/main.o
+cd ${HERE}
 cd ..
 
 cd Bootloader
