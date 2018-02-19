@@ -4,10 +4,10 @@
 KERNEL=$1
 SOURCEMEFILE=$2
 echo "Working on ${KERNEL} with ${SOURCEMEFILE}"
+echo "1" > /tmp/result
 . ../${SOURCEMEFILE}
 cd ../../Kernel/${KERNEL}
 make -j32 zImage
-echo "1" > /tmp/result
 [ ! "$?" = "0" ] && exit
 make -j32 modules
 [ ! "$?" = "0" ] && exit
