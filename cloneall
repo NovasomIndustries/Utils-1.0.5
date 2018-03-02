@@ -27,24 +27,28 @@ cd ${HERE}
 cd ..
 
 cd Bootloader
-git clone https://github.com/NovasomIndustries/u-boot-novasomU-2016.03_1.0.5.git
 git clone https://github.com/NovasomIndustries/u-boot-novasomP-2015.04_1.0.5.git
+git clone https://github.com/NovasomIndustries/u-boot-novasomU-2016.03_1.0.5.git
 git clone https://github.com/NovasomIndustries/u-boot-novasomM8-2017.11_1.0.5.git
+git clone https://github.com/NovasomIndustries/u-boot-novasomM9-2018.03_1.0.5.git
 git clone https://github.com/NovasomIndustries/u-boot-NOVAsomH5-2017.11_1.0.5.git
-ln -s u-boot-NOVAsomH5-2017.11_1.0.5 u-boot-NOVAsomH5-2017.11
-ln -s u-boot-novasomM8-2017.11_1.0.5 u-boot-novasomM8-2017.11
 ln -s u-boot-novasomP-2015.04_1.0.5 u-boot-novasomP-2015.04
 ln -s u-boot-novasomU-2016.03_1.0.5 u-boot-novasomU-2016.03
+ln -s u-boot-novasomM8-2017.11_1.0.5 u-boot-novasomM8-2017.11
+ln -s u-boot-novasomM9-2018.03_1.0.5 u-boot-novasomM9-2018.03
+ln -s u-boot-NOVAsomH5-2017.11_1.0.5 u-boot-NOVAsomH5-2017.11
 cd ..
 
 cd Kernel
 git clone https://github.com/NovasomIndustries/linux-allw-4.14.0_1.0.5.git
+git clone https://github.com/NovasomIndustries/linux-allw-4.15.0_1.0.5.git
 git clone https://github.com/NovasomIndustries/linux-4.11.0-QualcommLinaro_1.0.5.git
 git clone https://github.com/NovasomIndustries/linux-imx_4.1.15_1.2.0_ga_1.0.5.git
 git clone https://github.com/NovasomIndustries/linux-imx_4.1.43_1.0.5.git
-ln -s  linux-4.11.0-QualcommLinaro_1.0.5 linux-4.11.0-QualcommLinaro
-ln -s linux-allw-4.14.0_1.0.5 linux-allw-4.14.0
+ln -s linux-4.11.0-QualcommLinaro_1.0.5 linux-4.11.0-QualcommLinaro
 ln -s linux-imx_4.1.15_1.2.0_ga_1.0.5 linux-imx_4.1.15_1.2.0_ga
 ln -s linux-imx_4.1.43_1.0.5 linux-imx_4.1.43
+ln -s linux-allw-4.14.0_1.0.5 linux-allw-4.14.0
+ln -s linux-allw-4.15.0_1.0.5 linux-allw-4.15.0
 
 
