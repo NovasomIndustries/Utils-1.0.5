@@ -32,11 +32,13 @@ git clone https://github.com/NovasomIndustries/u-boot-novasomU-2016.03_1.0.5.git
 git clone https://github.com/NovasomIndustries/u-boot-novasomM8-2017.11_1.0.5.git
 git clone https://github.com/NovasomIndustries/u-boot-novasomM9-2018.03_1.0.5.git
 git clone https://github.com/NovasomIndustries/u-boot-NOVAsomH5-2017.11_1.0.5.git
+git clone https://github.com/NovasomIndustries/arm-trusted-firmware-h6-smp_1.0.5.git
 ln -s u-boot-novasomP-2015.04_1.0.5 u-boot-novasomP-2015.04
 ln -s u-boot-novasomU-2016.03_1.0.5 u-boot-novasomU-2016.03
 ln -s u-boot-novasomM8-2017.11_1.0.5 u-boot-novasomM8-2017.11
 ln -s u-boot-novasomM9-2018.03_1.0.5 u-boot-novasomM9-2018.03
 ln -s u-boot-NOVAsomH5-2017.11_1.0.5 u-boot-NOVAsomH5-2017.11
+ln -s arm-trusted-firmware-h6-smp_1.0.5 arm-trusted-firmware-h6-smp
 cd ..
 
 cd Kernel
