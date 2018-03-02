@@ -1,13 +1,14 @@
 #!/bin/sh
 . ../SourceMe64
-BOOT_P="/Devel/NOVAsom_SDK/Bootloader/u-boot-NOVAsomH5-2017.11"
+BOOT_P="/Devel/NOVAsom_SDK/Bootloader/u-boot-novasomM9-2018.03"
 echo "1" > /tmp/result
+cp bl31.bin /Devel/NOVAsom_SDK/Bootloader/u-boot-novasomM9-2018.03/.
 cd ${BOOT_P}
 make distclean
 [ "$?" != "0" ] && exit
 make mrproper
 [ "$?" != "0" ] && exit
-make orangepi_prime_defconfig
+make novasom_M9_defconfig
 [ "$?" != "0" ] && exit
 make -j32
 [ "$?" != "0" ] && exit

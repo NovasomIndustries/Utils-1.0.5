@@ -12,10 +12,10 @@
 
 DISK=${4}
 
-SPL_FILE="/Devel/NOVAsom_SDK/Bootloader/u-boot-NOVAsomH5-2017.11/spl/sunxi-spl.bin"
-UBOOT_IMG="/Devel/NOVAsom_SDK/Bootloader/u-boot-NOVAsomH5-2017.11/u-boot.itb"
-KERNEL="/Devel/NOVAsom_SDK/Blobs/linux-allw-4.14.0_Image"
-DTB_FILE="/Devel/NOVAsom_SDK/Kernel/linux-allw-4.14.0/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-prime.dtb"
+SPL_FILE="/Devel/NOVAsom_SDK/Bootloader/u-boot-novasomM9-2018.03/spl/sunxi-spl.bin"
+UBOOT_IMG="/Devel/NOVAsom_SDK/Bootloader/u-boot-novasomM9-2018.03/u-boot.itb"
+KERNEL="/Devel/NOVAsom_SDK/Blobs/linux-allw-4.15.0_Image"
+DTB_FILE="/Devel/NOVAsom_SDK/Kernel/linux-allw-4.15.0/arch/arm64/boot/dts/allwinner/novasom_m9.dtb"
 UINITRD="/Devel/NOVAsom_SDK/Deploy/uInitrd"
 NOVASOMPARAMS="/Devel/NOVAsom_SDK/Utils/BootParameters/$7"
 DEPLOY_DIR="/Devel/NOVAsom_SDK/Deploy"
@@ -25,7 +25,7 @@ echo "NOVASOMPARAMS is $NOVASOMPARAMS"
 
 echo "1" > /tmp/result
 
-FILES="$SPL_FILE $UBOOT_IMG $KERNEL $DTB_FILE"
+FILES="$SPL_FILE $UBOOT_IMG"
 for i in ${FILES}; do
 	if ! [ -f ${i} ]; then
 		echo "File ${i} not found"
@@ -44,10 +44,12 @@ sudo umount ${DISK}* >/dev/null 2>&1
 echo "Writing uSD"
 sleep 1
 sudo sgdisk -Z ${DISK} >/dev/null 2>&1
-sudo dd if=/dev/zero of=${DISK} bs=1M count=1; sync
 sudo echo -n "Writing u-boot ... "
-sudo dd if=${SPL_FILE} of=${DISK} bs=1024 seek=8; sync
-sudo dd if=${UBOOT_IMG} of=${DISK} bs=1024 seek=40; sync
+sudo dd if=/dev/zero of=${DISK} bs=1M count=1; sync
+cat ${SPL_FILE} ${UBOOT_IMG}  > /Devel/NOVAsom_SDK/Utils/allw/u-boot-sunxi-with-spl.bin
+sync
+sudo dd if=/Devel/NOVAsom_SDK/Utils/allw/u-boot-sunxi-with-spl.bin of=${DISK} bs=8k seek=1
+
 echo "Done"
 
 format_usd ${1} ${2} ${3} ${DISK}
@@ -56,26 +58,21 @@ if [ "$?" = "1" ]; then
 	exit
 fi
 
+
 rm -rf tmpmount
 mkdir tmpmount
 sleep 1
 sudo mount ${DISK}1 tmpmount
 [ "$?" != "0" ] && exit
-sudo mkdir tmpmount/NOVAboot
-
-echo -n "Copying `basename ${UBOOT_IMG}` ..."
-sudo cp ${UBOOT_IMG} tmpmount/NOVAboot/.
-[ "$?" != "0" ] && exit
-echo "Done"
 echo -n "Copying `basename ${KERNEL}` ..."
-sudo cp ${KERNEL} tmpmount/NOVAboot/Image
+sudo cp ${KERNEL} tmpmount/Image
 [ "$?" != "0" ] && exit
 echo "Done"
 echo -n "Copying `basename ${DTB_FILE}` ..."
-sudo cp ${DTB_FILE} tmpmount/NOVAboot/.
+sudo cp ${DTB_FILE} tmpmount/.
 echo "Done"
 echo -n "Copying `basename ${UINITRD}` ..."
-sudo cp ${UINITRD} tmpmount/NOVAboot/.
+sudo cp ${UINITRD} tmpmount/.
 [ "$?" != "0" ] && exit
 echo "Done"
 #echo -n "Copying `basename ${NOVASOMPARAMS}` ..."
@@ -85,14 +82,6 @@ echo "Done"
 #[ "$?" != "0" ] && exit
 sudo umount tmpmount
 sync
-
-cd ${DEPLOY_DIR}
-rm -f $SPL_FILE $UBOOT_IMG $KERNEL $DTB_FILE
-ln -s $SPL_FILE
-ln -s $UBOOT_IMG
-ln -s $KERNEL
-ln -s $DTB_FILE
-
 
 echo "0" > /tmp/result
 echo "Write finished succesfully"
