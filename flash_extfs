@@ -1,13 +1,7 @@
 #!/bin/sh
 DISK=$1
 FS=$2
-FILENAME=`basename ${FS}`
-echo -n "Extracting ${FILENAME} ... "
-tar jxf ${FS}.img.tar.bz2 
-echo "Done"
-echo -n "Writing uSD ... "
-sudo dd if=${FILENAME}.img of=${DISK} bs=4M
-echo "Done"
-rm ${FILENAME}.img
+bzcat ${FS} | sudo dd of=${DISK} bs=4M 
+sync
 echo 0 > /tmp/result
 return 0
