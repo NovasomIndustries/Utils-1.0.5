@@ -54,7 +54,8 @@ if [ $($gitbin rev-parse HEAD)>/dev/null 2>&1 != $($gitbin rev-parse @{u})>/dev/
 	read VAR
 	if [ "${VAR}" = "Y" ]; then
 		echo "Applying updates in ${1}" >> /Devel/NOVAsom_SDK/Logs/update.log
-		if [ "${1}" = "/Devel/NOVAsom_SDK/Qt/NOVAembed" ]; then
+		STRING=`echo ${1} | cut -c1-31`
+		if [ "${STRING}" = "/Devel/NOVAsom_SDK/Qt/NOVAembed" ]; then
 			rm -f /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed/NOVAembed.pro.userOLD
 			mv /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed.pro.user /Devel/NOVAsom_SDK/Qt/NOVAembed/NOVAembed.pro.userOLD
 		fi
