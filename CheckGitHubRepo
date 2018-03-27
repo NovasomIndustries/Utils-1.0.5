@@ -62,7 +62,7 @@ if [ $($gitbin rev-parse HEAD)>/dev/null 2>&1 != $($gitbin rev-parse @{u})>/dev/
 		git pull origin master >> /Devel/NOVAsom_SDK/Logs/update.log
 		COUNTRECV=`expr $COUNTRECV + $INCREMENT`;
 		# echo $1
-		if [ "${1}" = "/Devel/NOVAsom_SDK/Qt/NOVAembed" ]; then
+		if [ "${STRING}" = "/Devel/NOVAsom_SDK/Qt/NOVAembed" ]; then
 			HERE=`pwd`
 			novaembed
 			cd ${HERE} 
