@@ -1,6 +1,6 @@
 #!/bin/sh
-cd /Devel/NOVAsom_SDK/Utils
-. ./SourceMe64
+cp -r /Devel/NOVAsom_SDK/Utils/qcom/pylibfdt /Devel/NOVAsom_SDK/Bootloader/u-boot-novasomM8-2017.11/lib/libfdt/.
+. /Devel/NOVAsom_SDK/Utils/SourceMe64
 cd /Devel/NOVAsom_SDK/Bootloader/u-boot-novasomM8-2017.11
 touch rd
 echo "1" > /tmp/result
