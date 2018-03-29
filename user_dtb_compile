@@ -28,7 +28,8 @@ if [ "$2" = "U" ]; then
 	FOUND="1"
 fi
 [ ! "$FOUND" = "1" ] && echo "Not implemented yet"
-[ ! "$FOUND" = "1" ] && return 1
+echo "0" > /tmp/result
+[ ! "$FOUND" = "1" ] && return 0
 
 echo ""
 echo "################################"

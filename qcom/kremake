@@ -12,10 +12,11 @@ echo "1" > /tmp/result
 make mrproper
 make ${DEFCONFIGFILE}
 [ ! "$?" = "0" ] && exit
-make -j32 zImage
+make -j32
 [ ! "$?" = "0" ] && exit
 make -j32 modules
 [ ! "$?" = "0" ] && exit
+make qcom/apq8016-sbc.dtb
 cp arch/arm64/boot/Image /Devel/NOVAsom_SDK/Blobs/linux-qualcomm-4.11.0_Image
 cp arch/arm64/boot/Image /Devel/NOVAsom_SDK/Deploy/.
 echo "0" > /tmp/result
