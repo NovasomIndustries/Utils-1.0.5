@@ -31,13 +31,14 @@ echo "Done"
 echo -n "Creating partition 5:sec ..."
 sudo sgdisk -a 1 -n 5:262144:262175  -c 5:sec     -t 5:303E6AC3-AF15-4C54-9E9B-D9A8FBECF401 ${DISK} >/dev/null 2>&1
 sync
-sudo dd if=${BOOTLOADERS}/emmc_appsboot.mbn  of=${DISK}6 >/dev/null 2>&1
+#sudo dd if=${BOOTLOADERS}/emmc_appsboot.mbn  of=${DISK}6 >/dev/null 2>&1
+sudo dd if=${BOOTLOADERS}/emmc_appsboot.mbn  of=${DISK}5 >/dev/null 2>&1
 sync
 echo "Done"
 echo -n "Creating partition 6:aboot ..."
 sudo sgdisk -a 1 -n 6:262176:264223  -c 6:aboot   -t 6:400FFDCD-22E0-47E7-9A23-F16ED9382388 ${DISK} >/dev/null 2>&1
 sync
-sudo dd if=${BOOTLOADERS}/u-boot.img  of=${DISK}7 >/dev/null 2>&1
+sudo dd if=${BOOTLOADERS}/u-boot.img  of=${DISK}6 >/dev/null 2>&1
 sync
 echo "Done"
 echo -n "Creating partition 7:boot ..."
@@ -78,7 +79,7 @@ for i in ${FILES}; do
         sudo cp ${i} tmpmnt/NOVAboot/.
         echo "File $i stored on ${DISK}9"
 done
-mv tmpmnt/NOVAboot/linux-qualcomm-4.11.0_Image tmpmnt/NOVAboot/Image
+sudo mv tmpmnt/NOVAboot/linux-qualcomm-4.11.0_Image tmpmnt/NOVAboot/Image
 sudo umount tmpmnt
 sync
 
