@@ -9,12 +9,15 @@ echo "1" > /tmp/result
 cd ../../Kernel/${KERNEL}
 make -j32 Image
 [ ! "$?" = "0" ] && exit
-make -j32 modules
-[ ! "$?" = "0" ] && exit
+#make -j32 modules
+#[ ! "$?" = "0" ] && exit
+cd modules/gpu
+make -j -C mali-midgard/kernel_mode/driver BUILD=release
+cd ../..
 make -j32 allwinner/novasom_m9.dtb
 [ ! "$?" = "0" ] && exit
 
 cp arch/arm64/boot/dts/allwinner/novasom_m9.dtb /Devel/NOVAsom_SDK/Deploy/.
-cp arch/arm64/boot/Image /Devel/NOVAsom_SDK/Blobs/linux-allw-4.15.0_Image
+cp arch/arm64/boot/Image /Devel/NOVAsom_SDK/Blobs/linux-allw-3.10.65_Image
 cp arch/arm64/boot/Image /Devel/NOVAsom_SDK/Deploy/.
 echo "0" > /tmp/result

@@ -12,10 +12,12 @@
 
 DISK=${4}
 
-SPL_FILE="/Devel/NOVAsom_SDK/Bootloader/u-boot-novasomM9-2018.03/spl/sunxi-spl.bin"
-UBOOT_IMG="/Devel/NOVAsom_SDK/Bootloader/u-boot-novasomM9-2018.03/u-boot.itb"
-KERNEL="/Devel/NOVAsom_SDK/Blobs/linux-allw-4.15.0_Image"
-DTB_FILE="/Devel/NOVAsom_SDK/Kernel/linux-allw-4.15.0/arch/arm64/boot/dts/allwinner/novasom_m9.dtb"
+#SPL_FILE="/Devel/NOVAsom_SDK/Bootloader/u-boot-novasomM9-2018.03/spl/sunxi-spl.bin"
+#UBOOT_IMG="/Devel/NOVAsom_SDK/Bootloader/u-boot-novasomM9-2018.03/u-boot.itb"
+SPL_FILE="/Devel/NOVAsom_SDK/Utils-1.0.5/allw/out/boot0_sdcard.fex"
+UBOOT_IMG="/Devel/NOVAsom_SDK/Utils-1.0.5/allw/out/u-boot.fex"
+KERNEL="/Devel/NOVAsom_SDK/Blobs/linux-allw-3.10.65_Image"
+DTB_FILE="/Devel/NOVAsom_SDK/Kernel/linux-allw-3.10.65/arch/arm64/boot/dts/sun50iw6p1-petrel-p1.dtb"
 UINITRD="/Devel/NOVAsom_SDK/Deploy/uInitrd"
 NOVASOMPARAMS="/Devel/NOVAsom_SDK/Utils/BootParameters/$7"
 DEPLOY_DIR="/Devel/NOVAsom_SDK/Deploy"
@@ -45,12 +47,15 @@ echo "Writing uSD"
 sleep 1
 sudo sgdisk -Z ${DISK} >/dev/null 2>&1
 sudo echo -n "Writing u-boot ... "
-sudo dd if=/dev/zero of=${DISK} bs=1M count=1; sync
-cat ${SPL_FILE} ${UBOOT_IMG}  > /Devel/NOVAsom_SDK/Utils/allw/u-boot-sunxi-with-spl.bin
+sudo dd if=/dev/zero of=${DISK} bs=1M count=8; sync
+sudo dd if=${SPL_FILE} of=${DISK} bs=1k seek=8
+sudo dd if=${UBOOT_IMG} of=${DISK} bs=1k seek=16400
+#cat ${SPL_FILE} ${UBOOT_IMG}  > /Devel/NOVAsom_SDK/Utils/allw/u-boot-sunxi-with-spl.bin
+#sudo dd if=/Devel/NOVAsom_SDK/Utils/allw/u-boot-sunxi-with-spl.bin of=${DISK} bs=8k seek=1
 sync
-sudo dd if=/Devel/NOVAsom_SDK/Utils/allw/u-boot-sunxi-with-spl.bin of=${DISK} bs=8k seek=1
 
 echo "Done"
+exit
 
 format_usd ${1} ${2} ${3} ${DISK}
 if [ "$?" = "1" ]; then
