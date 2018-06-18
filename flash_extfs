@@ -3,7 +3,7 @@ DISK=$1
 FS=$2
 DTB_SDL=$3
 DTB_Q=$4
-bzcat ${FS} | sudo dd of=${DISK} bs=4M 
+bzcat ${FS} | sudo dd of=${DISK} bs=4M status=progress
 sync
 rm -rf ext_tmp
 mkdir ext_tmp
