@@ -1,0 +1,11 @@
+#!/bin/sh
+. ../SourceMe64
+echo "1" > /tmp/result
+cd /Devel/NOVAsom_SDK/Bootloader/u-boot-novasomN1-2017.11
+make distclean
+make mrproper
+make ls1012afrdm_qspi_defconfig
+make -j32
+[ "$?" = "1" ] && exit
+echo "0" > /tmp/result
+

@@ -35,8 +35,8 @@ sudo umount ${DISK}* >/dev/null 2>&1
 echo "Writing NOVAsomP uSD"
 sleep 1
 sudo echo -n "Writing u-boot ... "
-sudo dd if=/dev/zero of=${DISK} bs=4M count=1; sync
-sudo dd if=${SPL_FILE} of=${DISK} bs=1k seek=1; sync
+sudo dd if=/dev/zero of=${DISK} bs=4M count=1 status=progress; sync
+sudo dd if=${SPL_FILE} of=${DISK} bs=1k seek=1 status=progress; sync
 sync
 
 sudo fdisk ${DISK} << __EOF__

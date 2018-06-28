@@ -7,14 +7,22 @@ echo "Working on ${KERNEL} with ${SOURCEMEFILE}"
 echo "1" > /tmp/result
 . ../${SOURCEMEFILE}
 cd ../../Kernel/${KERNEL}
-make -j32 zImage
-[ ! "$?" = "0" ] && exit
+if [ "$KERNEL" = "linux-imx_4.1.15_1.2.0_ga" ]; then
+	make -j32 zImage
+	[ ! "$?" = "0" ] && exit
+	cp arch/arm/boot/zImage /Devel/NOVAsom_SDK/Blobs/linux-nxp_p-4.1.15.2_zImage
+	cp arch/arm/boot/zImage /Devel/NOVAsom_SDK/Deploy/.
+elif [ "$KERNEL" = "linux-4.14.47_layerscape" ]; then
+	make -j32 Image
+	[ ! "$?" = "0" ] && exit
+	cp arch/arm64/boot/Image /Devel/NOVAsom_SDK/Blobs/linux-4.14.47_layerscape_Image
+	cp arch/arm64/boot/Image /Devel/NOVAsom_SDK/Deploy/.
+else
+	make -j32 zImage
+	[ ! "$?" = "0" ] && exit
+	cp arch/arm/boot/zImage /Devel/NOVAsom_SDK/Blobs/linux-nxp_u-4.1.43_zImage
+	cp arch/arm/boot/zImage /Devel/NOVAsom_SDK/Deploy/.
+fi
 make -j32 modules
 [ ! "$?" = "0" ] && exit
-if [ "$KERNEL" = "linux-imx_4.1.15_1.2.0_ga" ]; then
-	cp arch/arm/boot/zImage /Devel/NOVAsom_SDK/Blobs/linux-nxp_p-4.1.15.2_zImage
-else
-	cp arch/arm/boot/zImage /Devel/NOVAsom_SDK/Blobs/linux-nxp_u-4.1.43_zImage
-fi
-cp arch/arm/boot/zImage /Devel/NOVAsom_SDK/Deploy/.
 echo "0" > /tmp/result
