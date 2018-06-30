@@ -1,6 +1,6 @@
 #!/bin/sh
-UPD_ELEMENTS="Bootloader/u-boot-novasomM8-2017.11_1.0.5 Bootloader/u-boot-novasomP-2015.04_1.0.5 Bootloader/u-boot-novasomU-2016.03_1.0.5 Bootloader/arm-trusted-firmware-h6-smp_1.0.5 u-boot-novasomN1-2017.11_1.0.5"
-KERNEL_ELEMENTS="Kernel/linux-imx_4.1.15_1.2.0_ga_1.0.5 Kernel/linux-imx_4.1.43_1.0.5 Kernel/linux-4.11.0-QualcommLinaro_1.0.5 Kernel/linux-allw-4.15.0_1.0.5 linux-4.14.47_layerscape_1.0.5"
+UPD_ELEMENTS="Bootloader/u-boot-novasomM8-2017.11_1.0.5 Bootloader/u-boot-novasomP-2015.04_1.0.5 Bootloader/u-boot-novasomU-2016.03_1.0.5 Bootloader/arm-trusted-firmware-h6-smp_1.0.5 Bootloader/u-boot-novasomN1-2017.11_1.0.5"
+KERNEL_ELEMENTS="Kernel/linux-imx_4.1.15_1.2.0_ga_1.0.5 Kernel/linux-imx_4.1.43_1.0.5 Kernel/linux-4.11.0-QualcommLinaro_1.0.5 Kernel/linux-allw-4.15.0_1.0.5 Kernel/linux-4.14.47_layerscape_1.0.5"
 CODE_ELEMENTS="${UPD_ELEMENTS} ${KERNEL_ELEMENTS}"
 DIRS="${UPD_ELEMENTS} ${KERNEL_ELEMENTS} Doc Utils Qt/NOVAembed-1.0.5"
 
