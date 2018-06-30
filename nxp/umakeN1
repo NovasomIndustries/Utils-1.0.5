@@ -1,4 +1,5 @@
 #!/bin/sh
+cp -r /Devel/NOVAsom_SDK/Utils/nxp/pylibfdt /Devel/NOVAsom_SDK/Bootloader/u-boot-novasomN1-2017.11/lib/libfdt/.
 . ../SourceMe64
 echo "1" > /tmp/result
 cd /Devel/NOVAsom_SDK/Bootloader/u-boot-novasomN1-2017.11
