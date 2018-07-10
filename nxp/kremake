@@ -6,6 +6,8 @@
 KERNEL=$1
 SOURCEMEFILE=$2
 DEFCONFIGFILE=$3
+LAYERSCAPE="linux-4.9.105_layerscape"
+
 . /Devel/NOVAsom_SDK/Utils/${SOURCEMEFILE}
 cd /Devel/NOVAsom_SDK/Kernel/${KERNEL}
 echo "1" > /tmp/result
@@ -14,25 +16,29 @@ if [ "$KERNEL" = "linux-imx_4.1.15_1.2.0_ga" ]; then
 	make mrproper
 	make ${DEFCONFIGFILE}
 	[ ! "$?" = "0" ] && exit
-        cp arch/arm/boot/zImage /Devel/NOVAsom_SDK/Blobs/linux-nxp_p-4.1.15.2_zImage
 	make -j32 zImage
 	[ ! "$?" = "0" ] && exit
+        cp arch/arm/boot/zImage /Devel/NOVAsom_SDK/Blobs/linux-nxp_p-4.1.15.2_zImage
 	cp arch/arm/boot/zImage /Devel/NOVAsom_SDK/Deploy/.
-elif [ "$KERNEL" = "linux-4.14.47_layerscape" ]; then
+elif [ "$KERNEL" = "$LAYERSCAPE" ]; then
 	make mrproper
-	make defconfig lsdk.config
+	make defconfig ${DEFCONFIGFILE}
 	[ ! "$?" = "0" ] && exit
-        cp arch/arm/boot64/Image /Devel/NOVAsom_SDK/Blobs/linux-4.14.47_layerscape_Image
 	make -j32 Image
 	[ ! "$?" = "0" ] && exit
-	cp arch/arm64/boot/Image /Devel/NOVAsom_SDK/Deploy/.
+	mkimage -A arm -O linux  -C none -n "linux" -a 0x80008000 -d arch/arm64/boot/Image uImage
+        make freescale/fsl-ls1012a-rdb.dtb
+        make freescale/fsl-ls1012a-frdm.dtb
+	make freescale/novasomn1-ls1012a.dtb
+        cp uImage /Devel/NOVAsom_SDK/Blobs/${LAYERSCAPE}_uImage
+	cp uImage /Devel/NOVAsom_SDK/Deploy/.
 else
 	make mrproper
 	make ${DEFCONFIGFILE}
 	[ ! "$?" = "0" ] && exit
-        cp arch/arm/boot/zImage /Devel/NOVAsom_SDK/Blobs/linux-nxp_u-4.1.43_zImage
 	make -j32 zImage
 	[ ! "$?" = "0" ] && exit
+        cp arch/arm/boot/zImage /Devel/NOVAsom_SDK/Blobs/linux-nxp_u-4.1.43_zImage
 	cp arch/arm/boot/zImage /Devel/NOVAsom_SDK/Deploy/.
 fi
 make -j32 modules

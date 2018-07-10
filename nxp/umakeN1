@@ -1,12 +1,14 @@
 #!/bin/sh
-cp -r /Devel/NOVAsom_SDK/Utils/nxp/pylibfdt /Devel/NOVAsom_SDK/Bootloader/u-boot-novasomN1-2017.11/lib/libfdt/.
 . ../SourceMe64
 echo "1" > /tmp/result
-cd /Devel/NOVAsom_SDK/Bootloader/u-boot-novasomN1-2017.11
+cd /Devel/NOVAsom_SDK/Bootloader/u-boot-novasomN1-2018.03_1.0.5
 make distclean
 make mrproper
-make ls1012afrdm_qspi_defconfig
+#make ls1012ardb_qspi_defconfig
+make ls1012ardb_qspi_SECURE_BOOT_defconfig
 make -j32
 [ "$?" = "1" ] && exit
+cd /Devel/NOVAsom_SDK/Utils/nxp
+./pbl_parser -f /Devel/NOVAsom_SDK/Bootloader/u-boot-novasomN1-2018.03_1.0.5/u-boot-dtb.bin
 echo "0" > /tmp/result
 
