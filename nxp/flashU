@@ -52,7 +52,7 @@ if ! [ "$?" = "0" ]; then
 	exit
 fi
 
-echo y | sudo mkfs.ext3 -t ext3 -L U6Config ${DISK}3
+echo y | sudo mkfs.ext3 -t ext3 -L U5Config ${DISK}3
 RET=$?
 echo "mkfs.ext3 returned $RET"
 if ! [ "$?" = "0" ]; then
@@ -61,7 +61,7 @@ if ! [ "$?" = "0" ]; then
 fi
 
 if [ "${1}" = "1" ]; then
-	echo y | sudo sudo mkfs.ext3 -t ext3 -L U6user1 ${DISK}2
+	echo y | sudo sudo mkfs.ext3 -t ext3 -L U5user1 ${DISK}2
 	RET=$?
 	echo "mkfs.ext3 returned $RET"
 	if ! [ "$?" = "0" ]; then
@@ -71,14 +71,14 @@ if [ "${1}" = "1" ]; then
 fi
 
 if [ "${1}" = "2" ]; then
-	echo y | sudo sudo mkfs.ext3 -t ext3 -L U6user1 ${DISK}4
+	echo y | sudo sudo mkfs.ext3 -t ext3 -L U5user1 ${DISK}4
 	RET=$?
 	echo "mkfs.ext3 returned $RET"
 	if ! [ "$?" = "0" ]; then
 		echo "mkfs.ext3 with error $RET"
 		exit
 	fi
-	echo y | sudo mkfs.ext3 -t ext3 -L U6user2 ${DISK}4
+	echo y | sudo mkfs.ext3 -t ext3 -L U5user2 ${DISK}4
 	RET=$?
 	echo "mkfs.ext3 returned $RET"
 	if ! [ "$?" = "0" ]; then
