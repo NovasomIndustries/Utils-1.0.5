@@ -30,5 +30,6 @@ else
 	cp arch/arm/boot/zImage /Devel/NOVAsom_SDK/Deploy/.
 fi
 make -j32 modules
+INSTALL_MOD_PATH=/Devel/NOVAsom_SDK/Deploy make modules_install
 [ ! "$?" = "0" ] && exit
 echo "0" > /tmp/result
